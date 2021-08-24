@@ -1,0 +1,5 @@
+terraform.tfvars
+terraform.tfstate.backup
+.terraform/providers/registry.terraform.io/hashicorp/google/3.80.0/darwin_arm64/terraform-provider-google_v3.80.0_x5
+terraform.tfstate
+.terraform.lock.hcl

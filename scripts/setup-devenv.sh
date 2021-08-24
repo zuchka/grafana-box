@@ -7,14 +7,14 @@ sudo apt-get upgrade -y
 sudo apt-get install -y apt-transport-https
 sudo apt-get install -y software-properties-common
 sudo apt-get install -y build-essential
-sudo apt-get install -y make
+# sudo apt-get install -y make
 
-# set UFW
-sudo ufw allow proto tcp from any to any port 22
-sudo ufw --force enable
-sudo ufw allow OpenSSH
-sudo ufw allow 3000
-sudo ufw reload
+# set UFW (use gcp firewall rules)
+# sudo ufw allow proto tcp from any to any port 22
+# sudo ufw --force enable
+# sudo ufw allow OpenSSH
+# sudo ufw allow 3000
+# sudo ufw reload
 
 # raise open file limit
 ulimit -S -n 2048
