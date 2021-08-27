@@ -1,4 +1,5 @@
 project              = "YOUR-PROJECT-ID"
+
 credentials_file     = "/Users/FOO/PATH/TO/YOUR-GCP-ACCESS.json"
-gce_ssh_user         = "grafana"
+
 gce_ssh_pub_key_file = "PATH/TO/YOUR/SSH/KEY.pub"
