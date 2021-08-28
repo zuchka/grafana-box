@@ -1,0 +1,5 @@
+# DO NOT FILL
+image_family         = "image_family_name"
+image_project        = "image_project_name"
+workflow             = "workflow_choice" 
+code_version         = "code_version_choice"

@@ -6,6 +6,7 @@ terraform {
     }
   }
 }
+
 provider "google" {
   credentials = file(var.credentials_file)
 
@@ -13,20 +14,14 @@ provider "google" {
   region  = var.region
   zone    = var.zone
 }
+
 resource "google_compute_address" "ip_address" {
-  name = "my-address"
+  name = "foo-address"
 }
-data "google_compute_image" "ubuntu_image" {
-  family  = "ubuntu-2004-lts"
-  project = "ubuntu-os-cloud"
-}
+
 resource "google_compute_firewall" "default" {
   name    = "grafana-port"
   network = "default"
-
-  # allow {
-  #   protocol = "icmp"
-  # }
 
   allow {
     protocol = "tcp"
@@ -34,28 +29,25 @@ resource "google_compute_firewall" "default" {
   }
 }
 
-# resource "google_compute_network" "default" {
-#   name = "default"
-# }
 resource "google_compute_instance" "instance_with_ip" {
   name         = "grafana-box"
-  machine_type = "e2-standard-4"
+  machine_type = "custom-4-25600"
   zone         = "us-west1-c"
-
+  
   provisioner "remote-exec" {
-    script = "./scripts/setup-binary.sh"
+    script = "./scripts/${var.workflow}.sh"
 
     connection {
-      type     = "ssh"
-      user     = "grafana"
+      type = "ssh"
+      user = "grafana"
       # password = "${var.root_password}"
-      host     = self.network_interface[0].access_config[0].nat_ip
+      host = self.network_interface[0].access_config[0].nat_ip
+    }
   }
-}
 
   boot_disk {
     initialize_params {
-      image = data.google_compute_image.ubuntu_image.self_link
+      image = "${var.image_family}/${var.image_project}"
     }
   }
 

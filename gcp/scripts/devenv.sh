@@ -4,17 +4,7 @@
 cd /home/grafana
 sudo apt-get update
 sudo apt-get upgrade -y
-sudo apt-get install -y apt-transport-https
-sudo apt-get install -y software-properties-common
-sudo apt-get install -y build-essential
-# sudo apt-get install -y make
-
-# set UFW (use gcp firewall rules)
-# sudo ufw allow proto tcp from any to any port 22
-# sudo ufw --force enable
-# sudo ufw allow OpenSSH
-# sudo ufw allow 3000
-# sudo ufw reload
+sudo apt-get install -y build-essential libfontconfig1 wget adduser tmux git
 
 # raise open file limit
 ulimit -S -n 2048
@@ -49,5 +39,6 @@ tmux new -d -s grafanaFrontend
 tmux send-keys -t grafanaFrontend.0 "yarn start" ENTER
 
 # start backend in tmux session
+# delay initialization to preserve memory
 tmux new -d -s grafanaBackend
-tmux send-keys -t grafanaBackend.0 "make run" ENTER
+tmux send-keys -t grafanaBackend.0 "sleep 180 && make run" ENTER

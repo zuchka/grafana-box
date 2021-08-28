@@ -1,0 +1,20 @@
+centos-7-v20210817                                    centos-cloud         centos-7                                      READY
+centos-8-v20210817                                    centos-cloud         centos-8                                      READY
+centos-stream-8-v20210817                             centos-cloud         centos-stream-8                               READY
+
+rocky-linux-8-v20210817                               rocky-linux-cloud    rocky-linux-8                                 READY
+
+***
+
+debian-10-buster-v20210817                            debian-cloud         debian-10                                     READY
+debian-11-bullseye-v20210817                          debian-cloud         debian-11                                     READY
+debian-9-stretch-v20210817                            debian-cloud         debian-9                                      READY
+
+ubuntu-1604-xenial-v20210429                          ubuntu-os-cloud      ubuntu-1604-lts                               READY
+ubuntu-1804-bionic-v20210825                          ubuntu-os-cloud      ubuntu-1804-lts                               READY
+ubuntu-2004-focal-v20210825                           ubuntu-os-cloud      ubuntu-2004-lts                               READY
+
+***
+
+windows-server-2016-dc-v20210810                      windows-cloud        windows-2016                                  READY
+windows-server-2019-dc-v20210810                      windows-cloud        windows-2019                                  READY
