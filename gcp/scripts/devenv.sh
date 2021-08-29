@@ -40,6 +40,5 @@ tmux new -d -s grafanaFrontend
 tmux send-keys -t grafanaFrontend.0 "yarn start" ENTER
 
 # start backend in tmux session
-# delay initialization to preserve memory
 tmux new -d -s grafanaBackend
 tmux send-keys -t grafanaBackend.0 "make run" ENTER

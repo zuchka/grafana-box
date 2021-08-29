@@ -32,6 +32,7 @@ fi
 
 if [[ ${2} =~ ^[0-9]\.[0-9]\.[0-9]$ ]]; then
   WORKFLOW=binary
+  GRAFANA_BOX_VERSION=${2}
 elif [[ ${2} =~ ^devenv$ ]]; then
   WORKFLOW=devenv
 elif [[ ${2} =~ ^package$ ]]; then
@@ -57,7 +58,6 @@ fi
 echo "all fields validated"
 
 IMAGE_PROJECT=${1}
-GRAFANA_BOX_VERSION=${2}
 CODE_VERSION=${3}
 # license=
 # arch=
