@@ -34,16 +34,17 @@ resource "google_compute_instance" "instance_with_ip" {
   # this should be determined dynamically
   # only devenv needs this much power
   # the others could use a micro instance probably (2 vCPU)
-  machine_type = "e2-standard-16"
-  zone         = "us-west1-c"
-  
+#  machine_type = "e2-standard-16"
+  machine_type = "${var.machine_type}-standard-${var.cpu_count}"
+  # machine_type = "n2d-standard-2"
+  # zone         = "us-central1-a"
+
   provisioner "remote-exec" {
     script = "./scripts/${var.workflow}.sh"
 
     connection {
       type = "ssh"
       user = "grafana"
-      # password = "${var.root_password}"
       host = self.network_interface[0].access_config[0].nat_ip
     }
   }

@@ -1,8 +1,9 @@
 #!/bin/bash
 
-# packages
+# make sure we are home
 cd /home/grafana
 
+# packages
 sudo -S -k apt-get update -y
 sudo -S -k apt-get upgrade -y
 sudo -S -k apt-get install -y build-essential libfontconfig1 wget adduser tmux git make
@@ -10,28 +11,28 @@ sudo -S -k apt-get install -y build-essential libfontconfig1 wget adduser tmux g
 # raise open file limit
 ulimit -S -n 2048
 
-# nvm
+# install nvm
 wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 . /home/grafana/.bashrc
 
-# node
+# install node
 nvm install --lts
 
-# yarn
+# install yarn
 npm install --global yarn
 
-# go
+# install go
 git clone https://github.com/canha/golang-tools-install-script.git
 . ./golang-tools-install-script/goinstall.sh
 . /home/grafana/.bashrc
 
-# grafana/grafana repo
+# clone grafana/grafana repo
 git clone https://github.com/grafana/grafana.git
 
-# yarn install
+# run yarn install
 cd /home/grafana/grafana
 yarn install --pure-lockfile
 

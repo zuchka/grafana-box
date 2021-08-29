@@ -2,16 +2,18 @@
 
 ###################################################
 #                                                 #
-#                   TEMPLATE                      #
+#                COMMAND EXAMPLES                 #
+#  pattern:                                       #
+#  . grafana-box.sh <OS> <WORKFLOW> <ARCH>        #
 #                                                 #
-#  build developer environment from main/commit   #
-#  . grafana-box.sh windows2016 devenv main       #
+#  build developer environment:                   #
+#  . grafana-box.sh centos-8 devenv intel         #
 #                                                 #
-#  build from specific binary                     #
-#  . grafana-box.sh centos8 8.1.1                 #
+#  build from specific binary on AMD:             #
+#  . grafana-box.sh windows-2016 8.1.1 amd        #
 #                                                 #
-#  build from OS package manager                  #
-#  . grafana-box.sh debian9 package               #
+#  build from OS package manager:                 #
+#  . grafana-box.sh debian-9 package intel        #
 #                                                 #
 ###################################################
 
@@ -32,45 +34,48 @@ fi
 
 if [[ ${2} =~ ^[0-9]\.[0-9]\.[0-9]$ ]]; then
   WORKFLOW=binary
+  CPU_COUNT=2
   GRAFANA_BOX_VERSION=${2}
 elif [[ ${2} =~ ^devenv$ ]]; then
   WORKFLOW=devenv
+  CPU_COUNT=8
 elif [[ ${2} =~ ^package$ ]]; then
   WORKFLOW=package
+  CPU_COUNT=2
 else
   echo "You have not chosen a valid workflow. Please choose your parameters from the following list:"
   echo -e "\ndevenv\npackage\n[GRAFANA_VERSION_AS_3_DIGITS] e.g. enter 8.1.2 for Grafana Version 8.1.2"
   exit
 fi
 
-# really needs more validating logic
-if [ ${2} == "devenv" ]; then
-  if ! [[ ${3} =~ ^(main|b-*|c-*) ]]; then
-    echo -e "please use one of the accepted patterns for choosing a code version"
-  fi
+if [[ ${3} =~ ^amd$ ]]; then
+  MACHINE_TYPE=n2d
+elif [[ ${3} =~ ^intel$ ]]; then
+  MACHINE_TYPE=e2
+else
+  echo -e "Please choose intel or amd for the processor type. example:\n. grafana-box.sh centos-8 8.1.1 amd"
+  exit
 fi
 
-# if [[ ${3} =~ ^(main|commit-pattern)$ ]]; then
-#   echo -e "should we add a special logic to validate commits?"
-#   exit
-# fi
+echo -e "all fields validated\nbuilding Terraform plan..."
 
-echo "all fields validated"
-
+# assign final vars
 IMAGE_PROJECT=${1}
-CODE_VERSION=${3}
-# license=
-# arch=
+# CODE_VERSION=${3}
 
+# create new tfvars file with injected vars
 cat <<EOT > gcp/terraform.tfvars
 gce_ssh_pub_key_file = "${GRAFANA_BOX_SSH}"
 credentials_file     = "${GRAFANA_BOX_CRED}"
 image_family         = "${IMAGE_FAMILY}"
 image_project        = "${IMAGE_PROJECT}"
 workflow             = "${WORKFLOW}" 
-code_version         = "${CODE_VERSION}"
+# code_version         = "${CODE_VERSION}"
+machine_type         = "${MACHINE_TYPE}"
+cpu_count            = "${CPU_COUNT}"
 EOT
 
+# create new binary setup script with injected vars
 cat <<EOT > gcp/scripts/binary.sh
 #!/bin/bash
 
@@ -92,5 +97,6 @@ sudo /bin/systemctl enable grafana-server
 sudo /bin/systemctl start grafana-server
 EOT
 
+# kick off terraform build
 cd gcp/
 terraform apply

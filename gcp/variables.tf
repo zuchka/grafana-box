@@ -3,11 +3,11 @@ variable "project" {
 }
 
 variable "region" {
-  default = "us-west1"
+  default = "us-central1"
 }
 
 variable "zone" {
-  default = "us-west1"
+  default = "us-central1-a"
 }
 
 variable "gce_ssh_user" {
@@ -24,4 +24,8 @@ variable image_family {}
 
 variable workflow {}
 
-variable code_version {}
+# variable code_version {}
+
+variable machine_type {}
+
+variable cpu_count {}
