@@ -31,7 +31,10 @@ resource "google_compute_firewall" "default" {
 
 resource "google_compute_instance" "instance_with_ip" {
   name         = "grafana-box"
-  machine_type = "custom-4-25600"
+  # this should be determined dynamically
+  # only devenv needs this much power
+  # the others could use a micro instance probably (2 vCPU)
+  machine_type = "e2-standard-16"
   zone         = "us-west1-c"
   
   provisioner "remote-exec" {
@@ -48,9 +51,10 @@ resource "google_compute_instance" "instance_with_ip" {
   boot_disk {
     initialize_params {
       image = "${var.image_family}/${var.image_project}"
+      size  = 25
     }
   }
-
+  
   network_interface {
     network = "default"
     access_config {

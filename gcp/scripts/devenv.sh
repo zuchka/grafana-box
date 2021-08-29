@@ -2,9 +2,10 @@
 
 # packages
 cd /home/grafana
-sudo apt-get update
-sudo apt-get upgrade -y
-sudo apt-get install -y build-essential libfontconfig1 wget adduser tmux git
+
+sudo -S -k apt-get update -y
+sudo -S -k apt-get upgrade -y
+sudo -S -k apt-get install -y build-essential libfontconfig1 wget adduser tmux git make
 
 # raise open file limit
 ulimit -S -n 2048
@@ -41,4 +42,4 @@ tmux send-keys -t grafanaFrontend.0 "yarn start" ENTER
 # start backend in tmux session
 # delay initialization to preserve memory
 tmux new -d -s grafanaBackend
-tmux send-keys -t grafanaBackend.0 "sleep 180 && make run" ENTER
+tmux send-keys -t grafanaBackend.0 "make run" ENTER

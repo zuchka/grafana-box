@@ -59,8 +59,6 @@ echo "all fields validated"
 IMAGE_PROJECT=${1}
 GRAFANA_BOX_VERSION=${2}
 CODE_VERSION=${3}
-GRAFANA_BOX_CRED="/Users/zuchka/.ssh/gcp-grafana-box.json"
-GRAFANA_BOX_SSH="/Users/zuchka/.ssh/id_ed25519.pub"
 # license=
 # arch=
 
@@ -80,7 +78,7 @@ cat <<EOT > gcp/scripts/binary.sh
 cd /home/grafana
 
 # packages
-sudo apt-get update
+sudo apt-get update -y
 sudo apt-get upgrade -y
 sudo apt-get install -y adduser libfontconfig1 wget
 
