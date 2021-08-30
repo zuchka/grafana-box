@@ -34,7 +34,7 @@ resource "google_compute_instance" "instance_with_ip" {
   # zone         = "us-central1-a"
 
   provisioner "remote-exec" {
-    script = "./scripts/${var.workflow}.sh"
+    script = "./scripts/${var.build}.sh"
 
     connection {
       type = "ssh"

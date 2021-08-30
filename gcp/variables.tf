@@ -22,7 +22,7 @@ variable "image_project" {}
 
 variable image_family {}
 
-variable workflow {}
+variable build {}
 
 # variable code_version {}
 
