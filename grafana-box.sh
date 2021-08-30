@@ -18,9 +18,15 @@
 ###################################################
 
 
-usage() { echo "Usage: $0 [-s <string>] [-p <string>]" 1>&2; exit 1; }
+usage() { echo "Usage: $0 [-s <string>] [-p <string>] [-m <string>]" 1>&2; exit 1; }
+# d for distro
+# w for workflow
+# a for arch
+# h for help
+# n for node
+# b for branch
 
-while getopts ":s:p:" o; do
+while getopts ":s:p:m:" o; do
     case "${o}" in
         s)
             s=${OPTARG}
@@ -28,6 +34,10 @@ while getopts ":s:p:" o; do
             ;;
         p)
             p=${OPTARG}
+            ;;
+        m)
+            m=${OPTARG}
+            ((m == "intel" || s == "amd")) || usage
             ;;
         *)
             usage
@@ -42,6 +52,7 @@ fi
 
 echo "s = ${s}"
 echo "p = ${p}"
+echo "m = ${m}"
 
 # validate user input
 if [[ ${s} =~ ^(ubuntu-1604-lts|ubuntu-1804-lts|ubuntu-2004-lts)$ ]]; then
@@ -74,14 +85,14 @@ else
   exit
 fi
 
-# if [[ ${3} =~ ^amd$ ]]; then
-#   MACHINE_TYPE=n2d
-# elif [[ ${3} =~ ^intel$ ]]; then
-#   MACHINE_TYPE=e2
-# else
-#   echo -e "Please choose intel or amd for the processor type. example:\n. grafana-box.sh centos-8 8.1.1 amd"
-#   exit
-# fi
+if [[ ${m} =~ ^amd$ ]]; then
+  MACHINE_TYPE=n2d
+elif [[ ${m} =~ ^intel$ ]]; then
+  MACHINE_TYPE=e2
+else
+  echo -e "Please choose intel or amd for the processor type. example:\n. grafana-box.sh centos-8 8.1.1 amd"
+  exit
+fi
 
 echo -e "all fields validated\nbuilding Terraform plan..."
 
