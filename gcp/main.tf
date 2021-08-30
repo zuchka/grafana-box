@@ -9,14 +9,13 @@ terraform {
 
 provider "google" {
   credentials = file(var.credentials_file)
-
-  project = var.project
-  region  = var.region
-  zone    = var.zone
+  project     = var.project
+  region      = var.region
+  zone        = var.zone
 }
 
 resource "google_compute_address" "ip_address" {
-  name = "foo-address"
+  name = "grafana-address"
 }
 
 resource "google_compute_firewall" "default" {
@@ -31,12 +30,7 @@ resource "google_compute_firewall" "default" {
 
 resource "google_compute_instance" "instance_with_ip" {
   name         = "grafana-box"
-  # this should be determined dynamically
-  # only devenv needs this much power
-  # the others could use a micro instance probably (2 vCPU)
-#  machine_type = "e2-standard-16"
   machine_type = "${var.machine_type}-standard-${var.cpu_count}"
-  # machine_type = "n2d-standard-2"
   # zone         = "us-central1-a"
 
   provisioner "remote-exec" {

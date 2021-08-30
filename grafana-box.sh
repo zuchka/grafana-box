@@ -9,22 +9,48 @@
 #  build developer environment:                   #
 #  . grafana-box.sh centos-8 devenv intel         #
 #                                                 #
-#  build from specific binary on AMD:             #
+#  build from specific binary on AMD EPYC:        #
 #  . grafana-box.sh windows-2016 8.1.1 amd        #
 #                                                 #
-#  build from OS package manager:                 #
+#  build from native package manager:             #
 #  . grafana-box.sh debian-9 package intel        #
 #                                                 #
 ###################################################
 
+
+usage() { echo "Usage: $0 [-s <string>] [-p <string>]" 1>&2; exit 1; }
+
+while getopts ":s:p:" o; do
+    case "${o}" in
+        s)
+            s=${OPTARG}
+            ((s == "ubuntu-1604-lts" || s == "ubuntu-1804-lts")) || usage
+            ;;
+        p)
+            p=${OPTARG}
+            ;;
+        *)
+            usage
+            ;;
+    esac
+done
+shift $((OPTIND-1))
+
+if [ -z "${s}" ] || [ -z "${p}" ]; then
+    usage
+fi
+
+echo "s = ${s}"
+echo "p = ${p}"
+
 # validate user input
-if [[ ${1} =~ ^(ubuntu-1604-lts|ubuntu-1804-lts|ubuntu-2004-lts)$ ]]; then
+if [[ ${s} =~ ^(ubuntu-1604-lts|ubuntu-1804-lts|ubuntu-2004-lts)$ ]]; then
   IMAGE_FAMILY=ubuntu-os-cloud
-elif [[ ${1} =~ ^(debian-9|debian-10|debian-11)$ ]]; then
+elif [[ ${s} =~ ^(debian-9|debian-10|debian-11)$ ]]; then
   IMAGE_FAMILY=debian-cloud
-elif [[ ${1} =~ ^(centos-7|centos-8|centos-stream-8)$ ]]; then
+elif [[ ${s} =~ ^(centos-7|centos-8|centos-stream-8)$ ]]; then
   IMAGE_FAMILY=centos-cloud
-elif [[ ${1} =~ ^(windows-2016|windows-2019)$ ]]; then
+elif [[ ${s} =~ ^(windows-2016|windows-2019)$ ]]; then
   IMAGE_FAMILY=windows-cloud
 else
   echo "You have not chosen a valid os. Please choose your parameters from the following list:"
@@ -32,14 +58,14 @@ else
   exit
 fi
 
-if [[ ${2} =~ ^[0-9]\.[0-9]\.[0-9]$ ]]; then
+if [[ ${p} =~ ^[0-9]\.[0-9]\.[0-9]$ ]]; then
   WORKFLOW=binary
   CPU_COUNT=2
   GRAFANA_BOX_VERSION=${2}
-elif [[ ${2} =~ ^devenv$ ]]; then
+elif [[ ${p} =~ ^devenv$ ]]; then
   WORKFLOW=devenv
   CPU_COUNT=8
-elif [[ ${2} =~ ^package$ ]]; then
+elif [[ ${p} =~ ^package$ ]]; then
   WORKFLOW=package
   CPU_COUNT=2
 else
@@ -48,22 +74,22 @@ else
   exit
 fi
 
-if [[ ${3} =~ ^amd$ ]]; then
-  MACHINE_TYPE=n2d
-elif [[ ${3} =~ ^intel$ ]]; then
-  MACHINE_TYPE=e2
-else
-  echo -e "Please choose intel or amd for the processor type. example:\n. grafana-box.sh centos-8 8.1.1 amd"
-  exit
-fi
+# if [[ ${3} =~ ^amd$ ]]; then
+#   MACHINE_TYPE=n2d
+# elif [[ ${3} =~ ^intel$ ]]; then
+#   MACHINE_TYPE=e2
+# else
+#   echo -e "Please choose intel or amd for the processor type. example:\n. grafana-box.sh centos-8 8.1.1 amd"
+#   exit
+# fi
 
 echo -e "all fields validated\nbuilding Terraform plan..."
 
 # assign final vars
-IMAGE_PROJECT=${1}
+IMAGE_PROJECT=${s}
 # CODE_VERSION=${3}
 
-# create new tfvars file with injected vars
+# create new 'terraform.tfvars' file with injected vars
 cat <<EOT > gcp/terraform.tfvars
 gce_ssh_pub_key_file = "${GRAFANA_BOX_SSH}"
 credentials_file     = "${GRAFANA_BOX_CRED}"
