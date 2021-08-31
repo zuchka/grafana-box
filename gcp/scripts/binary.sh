@@ -9,8 +9,8 @@ sudo apt-get upgrade -y
 sudo apt-get install -y adduser libfontconfig1 wget
 
 # get binary (not the standalone)
-wget https://dl.grafana.com/oss/release/grafana_7.5.10_amd64.deb
-sudo dpkg -i grafana_7.5.10_amd64.deb
+wget https://dl.grafana.com/oss/release/grafana__amd64.deb
+sudo dpkg -i grafana__amd64.deb
 
 # start and add to systemd
 sudo /bin/systemctl daemon-reload
