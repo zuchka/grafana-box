@@ -1,22 +1,5 @@
 #!/bin/bash
 
-###################################################
-#                                                 #
-#                COMMAND EXAMPLES                 #
-#  minimum required pattern:                      #
-#  . grafana-box.sh <OS> <WORKFLOW>               #
-#                                                 #
-#  build developer environment:                   #
-#  . grafana-box.sh centos-8 devenv               #
-#                                                 #
-#  build from specific binary on AMD EPYC:        #
-#  . grafana-box.sh windows-2016 8.1.1 -a         #
-#                                                 #
-#  build from native package manager:             #
-#  . grafana-box.sh debian-9 package              #
-#                                                 #
-###################################################
-
 # source helper functions
 . ./helpers/make-tfvars.sh
 . ./helpers/make-binary.sh
