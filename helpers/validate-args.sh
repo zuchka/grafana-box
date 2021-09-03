@@ -5,9 +5,9 @@ function validateArgs () {
         d)
             d=${OPTARG}
             #pattern-match the argument against a list in a file           
-            if ! [[ "$d" =~ $(echo ^\($(paste -sd'|' distro-list)\)$) ]]; then
+            if ! [[ "$d" =~ $(echo ^\($(paste -sd'|' ./helpers/distro-list)\)$) ]]; then
             echo -e "You have not chosen a valid distro.\nPlease choose one from the following list:\n"
-            cat distro-list
+            cat ./helpers/distro-list
             echo -e "\n"              
             usage
             else
