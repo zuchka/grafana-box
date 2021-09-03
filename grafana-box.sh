@@ -34,15 +34,16 @@ while getopts ":d:w: :a" o; do
               DISTRO=${d}
             fi
             
-            # more variable assignment based on distro
             if [[ ${DISTRO} =~ ubuntu ]]; then
               IMAGE_FAMILY=ubuntu-os-cloud
             elif [[ ${DISTRO} =~ debian ]]; then
               IMAGE_FAMILY=debian-cloud
             elif [[ ${DISTRO} =~ centos ]]; then
               IMAGE_FAMILY=centos-cloud
-            elif [[ ${DISTRO} =~ windows ]]; then
-              IMAGE_FAMILY=windows-cloud
+            elif [[ ${DISTRO} =~ centos ]]; then
+              IMAGE_FAMILY=centos-cloud
+            elif [[ ${DISTRO} =~ rocky ]]; then
+              IMAGE_FAMILY=rocky-linux-cloud
             fi
             ;;
         w)
@@ -90,9 +91,15 @@ echo "image_project ===> ${DISTRO}"
 echo -e "workflow ========> ${WORKFLOW}\n"
 echo -e "building Terraform plan...\n"
 
+########################################################
+#                                                      #
+#  generate provisioning scripts and terraform.tfvars  #
+#                                                      #
+########################################################
 
-# create new 'terraform.tfvars' file with injected vars
-cat <<EOT > gcp/terraform.tfvars
+makeTfvars () {
+  # create new 'terraform.tfvars' file with injected vars
+  cat <<EOT > gcp/terraform.tfvars
 gce_ssh_pub_key_file = "${GRAFANA_BOX_SSH}"
 credentials_file     = "${GRAFANA_BOX_CRED}"
 image_family         = "${IMAGE_FAMILY}"
@@ -102,10 +109,25 @@ build                = "${WORKFLOW}"
 machine_type         = "${MACHINE_TYPE}"
 cpu_count            = "${CPU_COUNT}"
 EOT
+}
 
-# create new binary setup script with injected vars
-cat <<EOT > gcp/scripts/binary.sh
+makeBinary () {
+  # create new binary setup script with injected vars
+  if [[ ${IMAGE_FAMILY} =~ (ubuntu|debian) ]]; then
+    cat <<EOT > gcp/scripts/binary.sh
 #!/bin/bash
+
+###################################################
+#                                                 #
+#                  WARNING!                       #
+#                                                 #
+#  do not make edits to ths file (binary.sh)      #
+#  a new version with updated variables           #
+#  will overwrite this file every time you run    #
+#  ./grafana-box.sh.                              #
+#                                                 #
+#        Instead, edit grafana-box.sh:lines       #
+###################################################
 
 # make sure we are home
 cd /home/grafana
@@ -119,12 +141,128 @@ sudo apt-get install -y adduser libfontconfig1 wget
 wget https://dl.grafana.com/oss/release/grafana_${GF_VERSION}_amd64.deb
 sudo dpkg -i grafana_${GF_VERSION}_amd64.deb
 
-# start and add to systemd
+# add to systemd and start
 sudo /bin/systemctl daemon-reload
 sudo /bin/systemctl enable grafana-server
 sudo /bin/systemctl start grafana-server
 EOT
+elif [[ ${IMAGE_FAMILY} =~ (centos|rocky) ]]; then
+  cat <<EOT > gcp/scripts/binary.sh
+#!/bin/bash
+
+###################################################
+#                                                 #
+#                  WARNING!                       #
+#                                                 #
+#  do not make edits to this file (binary.sh)     #
+#  a new version with updated variables           #
+#  will overwrite this file every time you run    #
+#  ./grafana-box.sh.                              #
+#                                                 #
+#        Instead, edit grafana-box.sh:lines       #
+###################################################
+
+# make sure we are home
+cd /home/grafana
+
+# get binary (not the standalone)
+sudo yum update -y
+sudo yum install -y https://dl.grafana.com/oss/release/grafana-${GF_VERSION}-1.x86_64.rpm
+
+# add to systemd and start
+sudo /bin/systemctl daemon-reload
+sudo /bin/systemctl enable grafana-server
+sudo /bin/systemctl start grafana-server
+EOT
+fi
+}
+
+makePackage () {
+  # create new package setup script with injected vars
+  if [[ ${IMAGE_FAMILY} =~ (ubuntu|debian) ]]; then
+    cat <<EOT > gcp/scripts/package.sh
+#!/bin/bash
+
+###################################################
+#                                                 #
+#                  WARNING!                       #
+#                                                 #
+#  do not make edits to this file (package.sh)    #
+#  a new version with updated variables           #
+#  will overwrite this file every time you run    #
+#  ./grafana-box.sh.                              #
+#                                                 #
+#        Instead, edit grafana-box.sh:lines       #
+###################################################
+
+# packages
+cd /home/grafana
+sudo apt-get update  -y
+sudo apt-get upgrade -y
+sudo apt-get install -y software-properties-common apt-transport-https wget adduser libfontconfig1
+
+# install grafana
+wget -q -O - https://packages.grafana.com/gpg.key | sudo apt-key add -
+echo "deb https://packages.grafana.com/oss/deb stable main" | sudo tee -a /etc/apt/sources.list.d/grafana.list
+sudo apt-get update  -y
+sudo apt-get install -y grafana
+
+# add to systemd and start
+sudo /bin/systemctl daemon-reload
+sudo /bin/systemctl enable grafana-server
+sudo /bin/systemctl start grafana-server
+EOT
+elif [[ ${IMAGE_FAMILY} =~ (centos|rocky) ]]; then
+  cat <<EOT > gcp/scripts/package.sh
+#!/bin/bash
+
+###################################################
+#                                                 #
+#                  WARNING!                       #
+#                                                 #
+#  do not make edits to this file (package.sh)    #
+#  a new version with updated variables           #
+#  will overwrite this file every time you run    #
+#  ./grafana-box.sh.                              #
+#                                                 #
+#        Instead, edit grafana-box.sh:lines       #
+###################################################
+
+# make sure we are home
+cd /home/grafana
+
+sudo bash -c "cat > /etc/yum.repos.d/grafana.repo" <<"EOG"
+#!/bin/bash
+
+[grafana]
+name=grafana
+baseurl=https://packages.grafana.com/oss/rpm
+repo_gpgcheck=1
+enabled=1
+gpgcheck=1
+gpgkey=https://packages.grafana.com/gpg.key
+sslverify=1
+sslcacert=/etc/pki/tls/certs/ca-bundle.crt
+EOG
+
+# sudo yum update -y
+sudo yum install -y grafana
+
+sudo /bin/systemctl daemon-reload
+sudo /bin/systemctl enable grafana-server
+sudo /bin/systemctl start grafana-server
+EOT
+fi
+}
+
+# replace show with the proper command to print ip. save as var and ssh.
+# ssh into server?
+# you could upload instructions in a readme file in root 'using-grafana-box'
+
+makeTfvars
+makeBinary
+makePackage
 
 # kick off terraform build
-cd gcp/
-terraform apply
+terraform -chdir=gcp/ apply
+terraform -chdir=gcp/ show

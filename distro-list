@@ -4,3 +4,7 @@ debian-11
 ubuntu-1604-lts
 ubuntu-1804-lts
 ubuntu-2004-lts
+centos-7
+centos-8
+centos-stream-8
+rocky-linux-8

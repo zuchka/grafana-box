@@ -4,9 +4,11 @@
 cd /home/grafana
 
 # packages
-sudo -S -k apt-get update -y
-sudo -S -k apt-get upgrade -y
-sudo -S -k apt-get install -y build-essential libfontconfig1 wget adduser tmux git make
+# sudo -S -k apt-get update -y
+# sudo -S -k apt-get upgrade -y
+# sudo -S -k apt-get install -y build-essential libfontconfig1 wget adduser tmux git make
+
+sudo yum install -y gcc gcc-c++ kernel-devel make tmux wget git
 
 # raise open file limit
 ulimit -S -n 2048
