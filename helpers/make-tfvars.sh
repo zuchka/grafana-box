@@ -1,7 +1,8 @@
 #!/bin/bash
 
+# create new 'terraform.tfvars' file with injected vars
+# don't hard-code values here
 function makeTfvars () {
-  # create new 'terraform.tfvars' file with injected vars
   cat <<EOT > ./gcp/terraform.tfvars
 gce_ssh_pub_key_file = "${GRAFANA_BOX_SSH}"
 credentials_file     = "${GRAFANA_BOX_CRED}"

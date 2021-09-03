@@ -1,7 +1,7 @@
 #!/bin/bash
 
+# create new package setup script with injected vars
 function makePackage () {
-  # create new package setup script with injected vars
   if [[ ${IMAGE_FAMILY} =~ (ubuntu|debian) ]]; then
     cat <<EOT > ./gcp/scripts/package.sh
 #!/bin/bash
@@ -15,7 +15,7 @@ function makePackage () {
 #  will overwrite this file every time you run    #
 #  ./grafana-box.sh.                              #
 #                                                 #
-#        Instead, edit grafana-box.sh:lines       #
+#     Instead, edit ./helpers/make-package.sh     #
 ###################################################
 
 # packages
@@ -48,7 +48,7 @@ elif [[ ${IMAGE_FAMILY} =~ (centos|rocky) ]]; then
 #  will overwrite this file every time you run    #
 #  ./grafana-box.sh.                              #
 #                                                 #
-#        Instead, edit grafana-box.sh:lines       #
+#     Instead, edit ./helpers/make-package.sh     #
 ###################################################
 
 # make sure we are home

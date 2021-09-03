@@ -9,7 +9,7 @@
 #  will overwrite this file every time you run    #
 #  ./grafana-box.sh.                              #
 #                                                 #
-#        Instead, edit grafana-box.sh:lines       #
+#     Instead, edit ./helpers/make-binary.sh      #
 ###################################################
 
 # make sure we are home

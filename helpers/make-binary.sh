@@ -1,7 +1,7 @@
 #!/bin/bash
 
+# create new binary setup script with injected vars
 function makeBinary () {
-  # create new binary setup script with injected vars
   if [[ ${IMAGE_FAMILY} =~ (ubuntu|debian) ]]; then
     cat <<EOT > ./gcp/scripts/binary.sh
 #!/bin/bash
@@ -15,7 +15,7 @@ function makeBinary () {
 #  will overwrite this file every time you run    #
 #  ./grafana-box.sh.                              #
 #                                                 #
-#        Instead, edit grafana-box.sh:lines       #
+#     Instead, edit ./helpers/make-binary.sh      #
 ###################################################
 
 # make sure we are home
@@ -48,7 +48,7 @@ elif [[ ${IMAGE_FAMILY} =~ (centos|rocky) ]]; then
 #  will overwrite this file every time you run    #
 #  ./grafana-box.sh.                              #
 #                                                 #
-#        Instead, edit grafana-box.sh:lines       #
+#     Instead, edit ./helpers/make-binary.sh      #
 ###################################################
 
 # make sure we are home

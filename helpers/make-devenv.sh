@@ -1,7 +1,7 @@
 #!/bin/bash
 
+# create new devenv setup script with injected vars
 function makeDevenv () {
-  # create new devenv setup script with injected vars
   if [[ ${IMAGE_FAMILY} =~ (ubuntu|debian) ]]; then
     cat <<EOT > ./gcp/scripts/devenv.sh
 #!/bin/bash
@@ -10,12 +10,12 @@ function makeDevenv () {
 #                                                 #
 #                  WARNING!                       #
 #                                                 #
-#  do not make edits to this file (devenv.sh)    #
+#  do not make edits to this file (devenv.sh)     #
 #  a new version with updated variables           #
 #  will overwrite this file every time you run    #
 #  ./grafana-box.sh.                              #
 #                                                 #
-#        Instead, edit grafana-box.sh:lines       #
+#     Instead, edit ./helpers/make-devenv.sh      #
 ###################################################
 
 #!/bin/bash
@@ -72,12 +72,12 @@ elif [[ ${IMAGE_FAMILY} =~ (centos|rocky) ]]; then
 #                                                 #
 #                  WARNING!                       #
 #                                                 #
-#  do not make edits to this file (devenv.sh)    #
+#  do not make edits to this file (devenv.sh)     #
 #  a new version with updated variables           #
 #  will overwrite this file every time you run    #
 #  ./grafana-box.sh.                              #
 #                                                 #
-#        Instead, edit grafana-box.sh:lines       #
+#     Instead, edit ./helpers/make-devenv.sh      #
 ###################################################
 
 #!/bin/bash

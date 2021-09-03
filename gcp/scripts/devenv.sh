@@ -4,12 +4,12 @@
 #                                                 #
 #                  WARNING!                       #
 #                                                 #
-#  do not make edits to this file (devenv.sh)    #
+#  do not make edits to this file (devenv.sh)     #
 #  a new version with updated variables           #
 #  will overwrite this file every time you run    #
 #  ./grafana-box.sh.                              #
 #                                                 #
-#        Instead, edit grafana-box.sh:lines       #
+#     Instead, edit ./helpers/make-devenv.sh      #
 ###################################################
 
 #!/bin/bash

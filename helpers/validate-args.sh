@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# getops arg-parsing logic
 function validateArgs () {
     case "${o}" in
         d)
