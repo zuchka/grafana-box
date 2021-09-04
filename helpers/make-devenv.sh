@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# TODO: add docker and dummy data
+# TODO: add coder with grafana's dev setup
+
 # create new devenv setup script with injected vars
 function makeDevenv () {
   if [[ ${IMAGE_FAMILY} =~ (ubuntu|debian) ]]; then

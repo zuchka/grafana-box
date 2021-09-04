@@ -27,3 +27,8 @@ makeTfvars
 terraform -chdir=gcp/ init
 terraform -chdir=gcp/ apply
 terraform -chdir=gcp/ show
+
+# TODO more graceful exit. print ip etc etc
+
+# TODO add flag for 'terraform destroy'
+# terraform -chdir=gcp/ destroy
