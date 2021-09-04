@@ -10,7 +10,7 @@
 
 ### choosing a distro and a workflow
 
-grafana-box generates scripts and terraform plans based on arguments that you pass from the command line. You must always supply the  chosen `<DISTRO>` after the `-d` flag, and the chosen `<WORKFLOW>' after the `-w` flag. All other flags are optional.
+grafana-box generates scripts and terraform plans based on arguments that you pass from the command line. You must always supply the  chosen `<DISTRO>` after the `-d` flag, and the chosen `<WORKFLOW>` after the `-w` flag. All other flags are optional.
 
 First, choose a distro from this list.
 
@@ -42,8 +42,10 @@ The same workflow works with `yum`:
 ./grafana-box.sh -d centos-7 -w package
 ```
 
-You can pass the `-a` flag with no arguments. This flag is optional **but should appear last when used**. If passed, it will build your image on a VM using AMD processors (default=Intel). This command builds a developer environment on Rocky Linux 8 on AMD processors:
+You can pass the `-a` flag with no arguments. This flag is optional **but should appear last when used**. If passed, it will build your image on a VM using AMD processors (default=Intel). 
+
+This command builds a developer environment on Rocky Linux 8 on AMD processors:
 
 ```
-./grafana-box.sh -d rocky-linux-8 -devenv -a
+./grafana-box.sh -d rocky-linux-8 -w devenv -a
 ```
