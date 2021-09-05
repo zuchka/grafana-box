@@ -12,23 +12,23 @@
 #     Instead, edit ./helpers/make-devenv.sh      #
 ###################################################
 
-#!/bin/bash
-
 # make sure we are home
 cd /home/grafana
 
 # packages
-sudo yum install -y gcc gcc-c++ kernel-devel make tmux wget git
+sudo -S -k apt-get update -y
+sudo -S -k apt-get upgrade -y
+sudo -S -k apt-get install -y build-essential libfontconfig1 wget adduser tmux git make
 
 # raise open file limit
 ulimit -S -n 2048
 
 # install nvm
 wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
-export NVM_DIR="/Users/zuchka/.nvm"
-[ -s "/Users/zuchka/.nvm/nvm.sh" ] && \. "/Users/zuchka/.nvm/nvm.sh"  # This loads nvm
-[ -s "/Users/zuchka/.nvm/bash_completion" ] && \. "/Users/zuchka/.nvm/bash_completion"  # This loads nvm bash_completion
-. /home/grafana/.bashrc
+export NVM_DIR="/home/grafana/.nvm"
+[ -s "/home/grafana/.nvm/nvm.sh" ] && \. "/home/grafana/.nvm/nvm.sh"  # This loads nvm
+[ -s "/home/grafana/.nvm/bash_completion" ] && \. "/home/grafana/.nvm/bash_completion"  # This loads nvm bash_completion
+. "/home/grafana/.bashrc"
 
 # install node
 nvm install --lts
