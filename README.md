@@ -1,12 +1,18 @@
 ## grafana-box
 
-### introduction & tutorial
+### quickstart
 
-## Prerequisites
+* clone this repo and move into the project's root directory
+* export path to a public ssh key
+* export path to your GCP service acct json
+* choose a distro from this list.
+* choose one of the three following workflows:
+* run `./grafana-box -d <DISTRO> -w <WORKFLOW>`:
+    * `./grafana-box.sh -d ubuntu-2004-lts -w package`
+    * `./grafana-box.sh -d rocky-linux-8 -w devenv -a`
+    * `./grafana-box.sh -d centos-7 -w 7.5.7 -a`
 
-## Step One: Configuring Your Secrets 
-
-## Step Two: Using grafana-box
+## How To Use `grafana-box`
 
 ### choosing a distro and a workflow
 
