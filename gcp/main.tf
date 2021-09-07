@@ -31,7 +31,6 @@ resource "google_compute_firewall" "default" {
 resource "google_compute_instance" "instance_with_ip" {
   name         = "grafana-box"
   machine_type = "${var.machine_type}-standard-${var.cpu_count}"
-  # zone         = "us-central1-a"
 
   provisioner "remote-exec" {
     script = "./scripts/${var.build}.sh"

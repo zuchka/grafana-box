@@ -32,9 +32,9 @@ ulimit -S -n 2048
 
 # install nvm
 wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
-export GF_NVM_DIR="/home/grafana/.nvm"
-[ -s "$GF_NVM_DIR/nvm.sh" ] && \. "$GF_NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$GF_NVM_DIR/bash_completion" ] && \. "$GF_NVM_DIR/bash_completion"  # This loads nvm bash_completion
+# export GF_NVM_DIR="/home/grafana/.nvm"
+[ -s "/home/grafana/.nvm/nvm.sh" ] && \. "/home/grafana/.nvm/nvm.sh"  # This loads nvm
+[ -s "/home/grafana/.nvm/bash_completion" ] && \. "/home/grafana/.nvm/bash_completion"  # This loads nvm bash_completion
 . "/home/grafana/.bashrc"
 
 # install node
@@ -92,8 +92,8 @@ ulimit -S -n 2048
 # install nvm
 wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
 export GF_NVM_DIR="/home/grafana/.nvm"
-[ -s "$GF_NVM_DIR/nvm.sh" ] && \. "$GF_NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$GF_NVM_DIR/bash_completion" ] && \. "$GF_NVM_DIR/bash_completion"  # This loads nvm .nvm/bash_completion
+[ -s "/home/grafana/.nvm/nvm.sh" ] && \. "/home/grafana/.nvm/nvm.sh"  # This loads nvm
+[ -s "/home/grafana/.nvm/bash_completion" ] && \. "/home/grafana/.nvm/bash_completion"  # This loads nvm .nvm/bash_completion
 . /home/grafana/.bashrc
 
 # install node

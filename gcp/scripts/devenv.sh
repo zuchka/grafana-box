@@ -4,7 +4,8 @@
 #                                                 #
 #                  WARNING!                       #
 #                                                 #
-#  do not make edits to this file (devenv.sh)     #
+#  do not make edits to ./gcp/scripts/devenv.sh   #
+#                                                 #
 #  a new version with updated variables           #
 #  will overwrite this file every time you run    #
 #  ./grafana-box.sh.                              #
@@ -16,19 +17,17 @@
 cd /home/grafana
 
 # packages
-sudo -S -k apt-get update -y
-sudo -S -k apt-get upgrade -y
-sudo -S -k apt-get install -y build-essential libfontconfig1 wget adduser tmux git make
+sudo yum install -y gcc gcc-c++ kernel-devel make tmux wget git
 
 # raise open file limit
 ulimit -S -n 2048
 
 # install nvm
 wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
-export NVM_DIR="/home/grafana/.nvm"
+export GF_NVM_DIR="/home/grafana/.nvm"
 [ -s "/home/grafana/.nvm/nvm.sh" ] && \. "/home/grafana/.nvm/nvm.sh"  # This loads nvm
-[ -s "/home/grafana/.nvm/bash_completion" ] && \. "/home/grafana/.nvm/bash_completion"  # This loads nvm bash_completion
-. "/home/grafana/.bashrc"
+[ -s "/home/grafana/.nvm/bash_completion" ] && \. "/home/grafana/.nvm/bash_completion"  # This loads nvm .nvm/bash_completion
+. /home/grafana/.bashrc
 
 # install node
 nvm install --lts
