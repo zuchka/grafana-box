@@ -25,9 +25,9 @@ makeDevenv
 makeTfvars
 
 # kick off terraform build
-# terraform -chdir=gcp/ init
-# terraform -chdir=gcp/ apply
-# terraform -chdir=gcp/ show
+terraform -chdir=gcp/ init
+terraform -chdir=gcp/ apply
+terraform -chdir=gcp/ show
 
 # TODO more graceful exit. print ip etc etc
 
