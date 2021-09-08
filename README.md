@@ -9,12 +9,14 @@
 * choose one of the three following workflows:
 * run `./grafana-box -d <DISTRO> -w <WORKFLOW>`:
     * `./grafana-box.sh -d ubuntu-2004-lts -w package`
-    * `./grafana-box.sh -d rocky-linux-8 -w devenv -a`
+    * `./grafana-box.sh -d rocky-linux-8 -w devenv -a` # builds from default remote branch `main`
+    * `./grafana-box.sh -d rocky-linux-8 -w devenv-remote-branch-foo -a` # builds from specified remote branch `remote-branch-foo`
     * `./grafana-box.sh -d centos-7 -w 7.5.7 -a`
 
 ## How To Use `grafana-box`
 
-### choosing a distro and a workflow
+### choosing a distro
+### choosing a workflow
 
 grafana-box generates scripts and terraform plans based on arguments that you pass from the command line. You must always supply the  chosen `<DISTRO>` after the `-d` flag, and the chosen `<WORKFLOW>` after the `-w` flag. All other flags are optional.
 
