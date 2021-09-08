@@ -43,8 +43,12 @@ git clone https://github.com/canha/golang-tools-install-script.git
 # clone grafana/grafana repo
 git clone https://github.com/grafana/grafana.git
 
-# run yarn install
+# check out chosen branch
 cd /home/grafana/grafana
+git fetch origin
+git checkout -b test-cloudwatch/workspace-iam-role-auth origin/cloudwatch/workspace-iam-role-auth
+
+# run yarn install
 yarn install --pure-lockfile
 
 # start frontend in tmux session

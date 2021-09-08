@@ -15,6 +15,7 @@ while getopts ":d:w: :a" o; do
 done
 
 # check for nulls
+validateBranch
 nullCheck
 
 # generate provisioning scripts and terraform.tfvars

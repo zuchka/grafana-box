@@ -51,8 +51,13 @@ git clone https://github.com/canha/golang-tools-install-script.git
 # clone grafana/grafana repo
 git clone https://github.com/grafana/grafana.git
 
-# run yarn install
+# check out chosen branch
 cd /home/grafana/grafana
+git fetch origin
+git checkout -b test-${BRANCH} origin/${BRANCH}
+git pull
+
+# run yarn install
 yarn install --pure-lockfile
 
 # start frontend in tmux session
@@ -110,8 +115,13 @@ git clone https://github.com/canha/golang-tools-install-script.git
 # clone grafana/grafana repo
 git clone https://github.com/grafana/grafana.git
 
-# run yarn install
+# check out chosen branch
 cd /home/grafana/grafana
+git fetch origin
+git checkout -b test-${BRANCH} origin/${BRANCH}
+git pull
+
+# run yarn install
 yarn install --pure-lockfile
 
 # start frontend in tmux session

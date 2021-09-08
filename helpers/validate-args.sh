@@ -29,15 +29,16 @@ function validateArgs () {
             ;;
         w)
             w=${OPTARG}
-            if ! [[ "$w" =~ ^(devenv|package|[0-9]\.[0-9]\.[0-9]+)$ ]]; then
+            if ! [[ "$w" =~ ^(devenv|package|[0-9]\.[0-9]\.[0-9]+) ]]; then
             echo -e "You have not chosen a valid workflow.\nPlease choose one from the following list:\n\n* package (if available, uses native package manager)\n* devenv  (fresh build from main branch. Grafana Frontend (yarn start) and Backend (make run) launched in detached Tmux sessions)\n* version (enter as 3 digits. -w 7.5.10, for example, will install Grafana version 7.5.10)\n"              
             usage
             elif [[ "$w" =~ ^[0-9]\.[0-9]\.[0-9]+$ ]]; then
             WORKFLOW=binary
             GF_VERSION=${w}
             CPU_COUNT=2
-            elif [[ ${w} =~ ^devenv$ ]]; then
-            WORKFLOW=${w}
+            elif [[ ${w} =~ ^devenv ]]; then
+            WORKFLOW=devenv
+            BRANCH=${w}
             CPU_COUNT=8
             else
             WORKFLOW=${w}
@@ -56,15 +57,34 @@ function validateArgs () {
 
 }
 
+function validateBranch () {
+    if [[ ${BRANCH} =~ ^devenv$ ]]; then
+        BRANCH=main
+    else
+        # drop first seven characters of ${w}
+        BRANCH=$(printf %s\\n "${BRANCH}" | cut -c 8-)
+        echo "checking existence of remote branch '$BRANCH'"
+        
+        BRANCH_VAL=$(git ls-remote --heads git@github.com:grafana/grafana.git "${BRANCH}" | wc -l)
+        # if one, continue. else, break with message: "remote branch ${foo} does not exist"
+        if [[ "${BRANCH_VAL}" == 0 ]]; then
+        echo -e "\nnot a valid remote branch. please try again\n"
+        usage
+        else 
+        echo -e "\n${BRANCH} found. Continuing...\n"
+        fi
+    fi
+}
+
 function nullCheck () {
     # these two parameters can't be null
     if [ -z "${d}" ] || [ -z "${w}" ]; then
-    usage
+        usage
     fi
 
     # workaround to keep the -a flag optional but set a default when it's absent
     if ! [[ ${MACHINE_TYPE} == n2d ]]; then
-    MACHINE_TYPE=e2
+        MACHINE_TYPE=e2
     fi
 
     echo -e "\nall fields validated\n"
