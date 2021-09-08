@@ -46,7 +46,8 @@ git clone https://github.com/grafana/grafana.git
 # check out chosen branch
 cd /home/grafana/grafana
 git fetch origin
-git checkout -b test-cloudwatch/workspace-iam-role-auth origin/cloudwatch/workspace-iam-role-auth
+git checkout -b test-gio/feat/shared-query-row origin/gio/feat/shared-query-row
+git pull
 
 # run yarn install
 yarn install --pure-lockfile

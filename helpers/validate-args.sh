@@ -62,8 +62,8 @@ function validateBranch () {
         BRANCH=main
     else
         # drop first seven characters of ${w}
-        BRANCH=$(printf %s\\n "${BRANCH}" | cut -c 8-)
-        echo "checking existence of remote branch '$BRANCH'"
+        BRANCH=$(echo "${BRANCH}" | cut -c 8-)
+        echo "checking existence of remote branch '${BRANCH}'"
         
         BRANCH_VAL=$(git ls-remote --heads git@github.com:grafana/grafana.git "${BRANCH}" | wc -l)
         # if one, continue. else, break with message: "remote branch ${foo} does not exist"
