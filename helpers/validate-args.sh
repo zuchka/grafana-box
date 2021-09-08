@@ -68,10 +68,10 @@ function validateBranch () {
         BRANCH_VAL=$(git ls-remote --heads git@github.com:grafana/grafana.git "${BRANCH}" | wc -l)
         # if one, continue. else, break with message: "remote branch ${foo} does not exist"
         if [[ "${BRANCH_VAL}" == 0 ]]; then
-        echo -e "\nnot a valid remote branch. please try again\n"
-        usage
+            echo -e "\n${BRANCH} is not a valid remote branch. please try again\n"
+            usage
         else 
-        echo -e "\n${BRANCH} found. Continuing...\n"
+            echo -e "\n${BRANCH} found. Continuing...\n"
         fi
     fi
 }
