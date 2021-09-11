@@ -11,7 +11,7 @@ function validateArgs () {
             if ! [[ "${d}" =~ $(echo ^\($(paste -sd'|' ./helpers/distro-list)\)$) ]]; then
                 echo -e "You have not chosen a valid distro.\nPlease choose one from the following list:\n"
                 cat ./helpers/distro-list
-            echo -e "\n"              
+                printf "\n"              
                 usage
             else
                 DISTRO="${d}"
@@ -38,17 +38,21 @@ function validateArgs () {
                 WORKFLOW="binary"
                 GF_VERSION="${w}"
                 CPU_COUNT=2
+                RAM="4gb"
             elif [[ "${w}" =~ ^devenv ]]; then
                 WORKFLOW="devenv"
                 BRANCH="${w}"
                 CPU_COUNT=8
+                RAM="16gb"
             else
                 WORKFLOW="${w}"
                 CPU_COUNT=2
+                RAM="4gb"
             fi
             ;;
         a)
             MACHINE_TYPE="n2d"
+            CPU="AMD"
             ;;
         *)
             usage
@@ -58,7 +62,7 @@ function validateArgs () {
 
 function validateBranch () {
     if [ -z "${BRANCH}" ]; then
-        return
+        BRANCH="n/a"
     elif [[ "${BRANCH}" =~ ^devenv$ ]]; then
         BRANCH="main"
     else
@@ -86,15 +90,22 @@ function nullCheck () {
     # workaround to keep the -a flag optional but set a default when it's absent
     if ! [[ "${MACHINE_TYPE}" =~ ^n2d$ ]]; then
         MACHINE_TYPE="e2"
+        CPU="Intel"
     fi
-
-    # use printf instead
-    # make separate function; report this with ip at end? and ram?
-    echo -e "\nall fields validated\n"
-    echo -e "machine_type ====> ${MACHINE_TYPE}"
-    echo "cpu_count =======> ${CPU_COUNT}"
-    echo "image_family ====> ${IMAGE_FAMILY}"
-    echo "image_project ===> ${DISTRO}"
-    echo -e "workflow ========> ${WORKFLOW}\n"
-    echo -e "building Terraform plan...\n"
+}
+function printValues () {
+    # report this with ip at end? ram? disk? username? branch? ssh access? browser access?
+    printf "\n%s:%30s\n\n" "current configuration" "VALID "
+    printf "%21b:%30b\n" \
+    "gcp_machine_type"  "${MACHINE_TYPE} " \
+    "gcp_image_family"  "${IMAGE_FAMILY} " \
+    "gcp_image_project" "${DISTRO}\n" \
+    "workflow"          "${WORKFLOW} " \
+    "branch"            "${BRANCH}\n" \
+    "cpu"               "${CPU} " \
+    "cpu_count"         "${CPU_COUNT} " \
+    "ram"               "${RAM} " \
+    "disk"              "25gb\n" \
+    "ssh access"        "ssh grafana@127.168.001.102 " \
+    "browser access"    "http://127.168.001.102:3000\n"
 }
