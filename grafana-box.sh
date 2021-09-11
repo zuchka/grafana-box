@@ -17,11 +17,12 @@ done
 
 shift "$((OPTIND-1))"
 
-# check for nulls
+# check for valid branch and nulls
 validateBranch
 nullCheck
 
 # generate provisioning scripts and terraform.tfvars
+printValues
 makeBinary
 makePackage
 makeDevenv
