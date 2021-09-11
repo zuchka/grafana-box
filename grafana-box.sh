@@ -11,7 +11,7 @@ if [[ "${1}" =~ ^destroy$ ]]; then
   exit
 fi
 
-while getopts ":d:w: :a" o; do
+while getopts ":d:w: :a :n:" o; do
   validateArgs
 done
 

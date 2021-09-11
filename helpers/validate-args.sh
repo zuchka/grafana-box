@@ -50,6 +50,11 @@ function validateArgs () {
                 RAM="4gb"
             fi
             ;;
+        n)
+            NODE_VERSION="${OPTARG}"
+            # validate here
+            echo "Node ${NODE_VERSION}"
+            ;;
         a)
             MACHINE_TYPE="n2d"
             CPU="AMD"
@@ -88,7 +93,8 @@ function nullCheck () {
     fi
 
     # workaround to keep the -a flag optional but set a default when it's absent
-    if ! [[ "${MACHINE_TYPE}" =~ ^n2d$ ]]; then
+
+    if [[ -z "${MACHINE_TYPE}" ]]; then
         MACHINE_TYPE="e2"
         CPU="Intel"
     fi
@@ -106,6 +112,6 @@ function printValues () {
     "cpu_count"         "${CPU_COUNT} " \
     "ram"               "${RAM} " \
     "disk"              "25gb\n" \
-    "ssh access"        "ssh grafana@127.168.001.102 " \
-    "browser access"    "http://127.168.001.102:3000\n"
+    "ssh access"        "ssh grafana@${MACHINE_IP} " \
+    "browser access"    "http://${MACHINE_IP}:3000\n"
 }

@@ -48,7 +48,7 @@ git clone https://github.com/grafana/grafana.git
 # check out chosen branch
 cd /home/grafana/grafana
 git fetch origin
-git checkout -b test-n/a origin/n/a
+git checkout -b test-zoltan/redux-immutability-check origin/zoltan/redux-immutability-check
 git pull
 
 # run yarn install
