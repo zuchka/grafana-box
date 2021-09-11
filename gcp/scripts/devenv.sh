@@ -17,17 +17,19 @@
 cd /home/grafana
 
 # packages
-sudo yum install -y gcc gcc-c++ kernel-devel make tmux wget git
+sudo -S -k apt-get update -y
+sudo -S -k apt-get upgrade -y
+sudo -S -k apt-get install -y build-essential libfontconfig1 wget adduser tmux git make
 
 # raise open file limit
 ulimit -S -n 2048
 
 # install nvm
 wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
-export GF_NVM_DIR="/home/grafana/.nvm"
+# export GF_NVM_DIR="/home/grafana/.nvm"
 [ -s "/home/grafana/.nvm/nvm.sh" ] && \. "/home/grafana/.nvm/nvm.sh"  # This loads nvm
-[ -s "/home/grafana/.nvm/bash_completion" ] && \. "/home/grafana/.nvm/bash_completion"  # This loads nvm .nvm/bash_completion
-. /home/grafana/.bashrc
+[ -s "/home/grafana/.nvm/bash_completion" ] && \. "/home/grafana/.nvm/bash_completion"  # This loads nvm bash_completion
+. "/home/grafana/.bashrc"
 
 # install node
 nvm install --lts
@@ -46,7 +48,7 @@ git clone https://github.com/grafana/grafana.git
 # check out chosen branch
 cd /home/grafana/grafana
 git fetch origin
-git checkout -b test-gio/feat/shared-query-row origin/gio/feat/shared-query-row
+git checkout -b test-n/a origin/n/a
 git pull
 
 # run yarn install
