@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # getops arg-parsing logic
-function usage() { echo -e "Usage: $0 [-d <distro>] [-w <workflow>] [optional: -a <FLAG_ONLY> runs AMD processors instead of default Intel]\n" 1>&2; exit 1; }
+function usage() { printf "\n%b\n" "Usage: $0 [-d <distro>] [-w <workflow>] [optional: -a <FLAG_ONLY> runs AMD processors instead of default Intel]\n" 1>&2; exit 1; }
 
 function validateArgs () {
     case "${o}" in
@@ -9,9 +9,10 @@ function validateArgs () {
             d="${OPTARG}"
             #pattern-match the argument against a list in a file           
             if ! [[ "${d}" =~ $(echo ^\($(paste -sd'|' ./helpers/distro-list)\)$) ]]; then
-                echo -e "You have not chosen a valid distro.\nPlease choose one from the following list:\n"
+                # echo -e "You have not chosen a valid distro.\nPlease choose one from the following list:\n"
+                printf "%b" "\nYou have not chosen a valid distro.\n\n" "Please choose one from the following list:\n\n"
                 cat ./helpers/distro-list
-                printf "\n"              
+                printf "%b\n\n" ""
                 usage
             else
                 DISTRO="${d}"
@@ -32,13 +33,14 @@ function validateArgs () {
         w)
             w="${OPTARG}"
             if ! [[ "${w}" =~ ^(devenv|package|[0-9]\.[0-9]\.[0-9]+) ]]; then
-                echo -e "You have not chosen a valid workflow.\nPlease choose one from the following list:\n\n* package (if available, uses native package manager)\n* devenv  (fresh build from main branch. Grafana Frontend (yarn start) and Backend (make run) launched in detached Tmux sessions)\n* version (enter as 3 digits. -w 7.5.10, for example, will install Grafana version 7.5.10)\n"              
+                printf "%b" "You have not chosen a valid workflow.\nPlease choose one from the following list:\n\n* package (if available, uses native package manager)\n* devenv  (fresh build from main branch. Grafana Frontend (yarn start) and Backend (make run) launched in detached Tmux sessions)\n* version (enter as 3 digits. -w 7.5.10, for example, will install Grafana version 7.5.10)\n"
                 usage
             elif [[ "${w}" =~ ^[0-9]\.[0-9]\.[0-9]+$ ]]; then
                 WORKFLOW="binary"
                 GF_VERSION="${w}"
                 CPU_COUNT=2
                 RAM="4gb"
+                NODE_VERSION="n/a"
             elif [[ "${w}" =~ ^devenv ]]; then
                 WORKFLOW="devenv"
                 BRANCH="${w}"
@@ -48,12 +50,17 @@ function validateArgs () {
                 WORKFLOW="${w}"
                 CPU_COUNT=2
                 RAM="4gb"
+                NODE_VERSION="n/a"
             fi
             ;;
         n)
             NODE_VERSION="${OPTARG}"
-            # validate here
-            echo "Node ${NODE_VERSION}"
+            if ! [[ "${NODE_VERSION}" =~ $(echo ^\($(paste -sd'|' ./helpers/nvm-remote-versions)\)$) ]]; then
+                printf "%b" "You have not chosen a valid node version.\nPlease choose one from the following list:\n"
+                cat ./helpers/nvm-remote-versions
+                printf "%b\n" ""
+                usage
+            fi
             ;;
         a)
             MACHINE_TYPE="n2d"
@@ -73,15 +80,15 @@ function validateBranch () {
     else
         # drop first seven characters of ${w} "devenv-"
         BRANCH=$(echo "${BRANCH}" | cut -c 8-)
-        echo "checking existence of remote branch '${BRANCH}'"
+        printf "\n%b\n" "checking existence of remote branch '${BRANCH}'"
         
         BRANCH_VAL=$(git ls-remote --heads git@github.com:grafana/grafana.git "${BRANCH}" | wc -l)
 
         if [[ "${BRANCH_VAL}" == 0 ]]; then
-            echo -e "\n${BRANCH} is not a valid remote branch. please try again\n"
+            printf "\n%b\n" "'${BRANCH}' is not a valid remote branch. please try again"
             usage
         else 
-            echo -e "\n${BRANCH} found. Continuing...\n"
+            printf "\n%b\n" "${BRANCH} found. Continuing..."
         fi
     fi
 }
@@ -92,22 +99,26 @@ function nullCheck () {
         usage
     fi
 
-    # workaround to keep the -a flag optional but set a default when it's absent
-
+    # workarounds to keep the -a and -n flags optional but set a default when they're absent
     if [[ -z "${MACHINE_TYPE}" ]]; then
         MACHINE_TYPE="e2"
         CPU="Intel"
     fi
+
+    if [[ -z "${NODE_VERSION}" && "${WORKFLOW}" =~ devenv ]]; then
+        NODE_VERSION="--lts"
+    fi  
 }
 function printValues () {
-    # report this with ip at end? ram? disk? username? branch? ssh access? browser access?
+    # report this with ip at end?
     printf "\n%s:%30s\n\n" "current configuration" "VALID "
     printf "%21b:%30b\n" \
     "gcp_machine_type"  "${MACHINE_TYPE} " \
     "gcp_image_family"  "${IMAGE_FAMILY} " \
     "gcp_image_project" "${DISTRO}\n" \
-    "workflow"          "${WORKFLOW} " \
-    "branch"            "${BRANCH}\n" \
+    "workflow"          "${WORKFLOW} (${GF_VERSION}) " \
+    "branch"            "${BRANCH} " \
+    "NodeJS version"    "${NODE_VERSION}\n" \
     "cpu"               "${CPU} " \
     "cpu_count"         "${CPU_COUNT} " \
     "ram"               "${RAM} " \
