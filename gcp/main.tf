@@ -62,3 +62,6 @@ resource "google_compute_instance" "instance_with_ip" {
 }
 
 # print ip address to console here?
+output "instance_ip" {
+  value = google_compute_address.ip_address.address
+}
