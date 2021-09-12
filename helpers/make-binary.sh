@@ -23,7 +23,7 @@ cd /home/grafana
 
 # packages
 sudo apt-get update -y
-sudo apt-get upgrade -y
+# sudo apt-get upgrade -y
 sudo apt-get install -y adduser libfontconfig1 wget
 
 # get binary (not the standalone)
@@ -55,7 +55,7 @@ elif [[ ${IMAGE_FAMILY} =~ (centos|rocky) ]]; then
 cd /home/grafana
 
 # get binary (not the standalone)
-sudo yum update -y
+# sudo yum update -y
 sudo yum install -y https://dl.grafana.com/oss/release/grafana-${GF_VERSION}-1.x86_64.rpm
 
 # add to systemd and start

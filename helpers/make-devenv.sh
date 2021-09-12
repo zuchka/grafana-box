@@ -24,7 +24,7 @@ cd /home/grafana
 
 # packages
 sudo -S -k apt-get update -y
-sudo -S -k apt-get upgrade -y
+# sudo -S -k apt-get upgrade -y
 sudo -S -k apt-get install -y build-essential libfontconfig1 wget adduser tmux git make
 
 # raise open file limit
@@ -38,7 +38,7 @@ wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
 . "/home/grafana/.bashrc"
 
 # install node
-nvm install --lts
+nvm install ${NODE_VERSION}
 
 # install yarn
 npm install --global yarn
@@ -47,6 +47,12 @@ npm install --global yarn
 git clone https://github.com/canha/golang-tools-install-script.git
 . ./golang-tools-install-script/goinstall.sh
 . /home/grafana/.bashrc
+
+# install docker
+curl -fsSL https://get.docker.com -o get-docker.sh
+sudo sh get-docker.sh
+# sudo usermod -aG docker grafana
+# su - grafana
 
 # clone grafana/grafana repo
 git clone https://github.com/grafana/grafana.git
@@ -102,7 +108,7 @@ export GF_NVM_DIR="/home/grafana/.nvm"
 . /home/grafana/.bashrc
 
 # install node
-nvm install --lts
+nvm install ${NODE_VERSION}
 
 # install yarn
 npm install --global yarn
@@ -111,6 +117,12 @@ npm install --global yarn
 git clone https://github.com/canha/golang-tools-install-script.git
 . ./golang-tools-install-script/goinstall.sh
 . /home/grafana/.bashrc
+
+# install docker
+curl -fsSL https://get.docker.com -o get-docker.sh
+sudo sh get-docker.sh
+# sudo usermod -aG docker ${USER}
+# su - ${USER}
 
 # clone grafana/grafana repo
 git clone https://github.com/grafana/grafana.git

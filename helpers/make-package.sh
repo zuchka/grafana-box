@@ -21,7 +21,7 @@ function makePackage () {
 # packages
 cd /home/grafana
 sudo -S -k apt-get update  -y
-sudo -S -k apt-get upgrade -y
+# sudo -S -k apt-get upgrade -y
 sudo -S -k apt-get install -y software-properties-common apt-transport-https wget adduser libfontconfig1
 
 # install grafana
