@@ -31,6 +31,8 @@ makeTfvars
 # kick off terraform build
 terraform -chdir=gcp/ init
 terraform -chdir=gcp/ apply
-terraform -chdir=gcp/ show
+# terraform -chdir=gcp/ show
 
-# TODO more graceful exit. print ip etc etc
+# print the VM ip + metadata
+MACHINE_IP=$(terraform -chdir=gcp/ output -raw instance_ip)
+printValues
