@@ -21,6 +21,11 @@ shift "$((OPTIND-1))"
 validateBranch
 nullCheck
 
+# create new subdirectory
+# generateDir (use timestamp instead of logic?)
+# and then change destroy logic to search recursively through dir and find all plans
+# copy gcp into 001 ...
+
 # generate provisioning scripts and terraform.tfvars
 printValues
 makeBinary
