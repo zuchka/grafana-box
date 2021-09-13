@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# copy template into new folder for box
+GFB_FOLDER=$(date +%s)
+cp -r ./gcp ./${GFB_FOLDER}
+
 # source helper functions
 for helper in ./helpers/*.sh; do
   . "${helper}"
@@ -7,7 +11,7 @@ done
 
 # validate args
 if [[ "${1}" =~ ^destroy$ ]]; then
-  terraform -chdir=gcp/ destroy
+  terraform -chdir=${GFB_FOLDER}/ destroy
   exit
 fi
 
@@ -21,10 +25,7 @@ shift "$((OPTIND-1))"
 validateBranch
 nullCheck
 
-# create new subdirectory
-# generateDir (use timestamp instead of logic?)
 # and then change destroy logic to search recursively through dir and find all plans
-# copy gcp into 001 ...
 
 # generate provisioning scripts and terraform.tfvars
 printValues
@@ -34,10 +35,10 @@ makeDevenv
 makeTfvars
 
 # kick off terraform build
-terraform -chdir=gcp/ init
-terraform -chdir=gcp/ apply
-# terraform -chdir=gcp/ show
+terraform -chdir=${GFB_FOLDER}/ init
+terraform -chdir=${GFB_FOLDER}/ apply
+# terraform -chdir=${GFB_FOLDER}/ show
 
 # print the VM ip + metadata
-MACHINE_IP=$(terraform -chdir=gcp/ output -raw instance_ip)
+MACHINE_IP=$(terraform -chdir=${GFB_FOLDER}/ output -raw instance_ip)
 printValues

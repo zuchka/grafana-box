@@ -3,7 +3,7 @@
 # create new devenv setup script with injected vars
 function makeDevenv () {
   if [[ ${IMAGE_FAMILY} =~ (ubuntu|debian) ]]; then
-    cat <<EOT > ./gcp/scripts/devenv.sh
+    cat <<EOT > ./${GFB_FOLDER}/scripts/devenv.sh
 #!/bin/bash
 
 ###################################################
@@ -66,6 +66,8 @@ git pull
 # run yarn install
 yarn install --pure-lockfile
 
+# start devenv dummy DBs based on input
+
 # start frontend in tmux session
 tmux new -d -s grafanaFrontend
 tmux send-keys -t grafanaFrontend.0 "yarn start" ENTER
@@ -75,7 +77,7 @@ tmux new -d -s grafanaBackend
 tmux send-keys -t grafanaBackend.0 "make run" ENTER
 EOT
 elif [[ ${IMAGE_FAMILY} =~ (centos|rocky) ]]; then
-  cat <<EOT > ./gcp/scripts/devenv.sh
+  cat <<EOT > ./${GFB_FOLDER}/scripts/devenv.sh
 #!/bin/bash
 
 ###################################################

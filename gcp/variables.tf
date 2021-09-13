@@ -2,6 +2,8 @@ variable "project" {
   default = "grafana-box"
 }
 
+variable "name" {}
+
 variable "region" {
   default = "us-central1"
 }

@@ -3,7 +3,7 @@
 # create new binary setup script with injected vars
 function makeBinary () {
   if [[ ${IMAGE_FAMILY} =~ (ubuntu|debian) ]]; then
-    cat <<EOT > ./gcp/scripts/binary.sh
+    cat <<EOT > ./${GFB_FOLDER}/scripts/binary.sh
 #!/bin/bash
 
 ###################################################
@@ -36,7 +36,7 @@ sudo /bin/systemctl enable grafana-server
 sudo /bin/systemctl start grafana-server
 EOT
 elif [[ ${IMAGE_FAMILY} =~ (centos|rocky) ]]; then
-  cat <<EOT > ./gcp/scripts/binary.sh
+  cat <<EOT > ./${GFB_FOLDER}/scripts/binary.sh
 #!/bin/bash
 
 ###################################################

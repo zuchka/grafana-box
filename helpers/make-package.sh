@@ -3,7 +3,7 @@
 # create new package setup script with injected vars
 function makePackage () {
   if [[ ${IMAGE_FAMILY} =~ (ubuntu|debian) ]]; then
-    cat <<EOT > ./gcp/scripts/package.sh
+    cat <<EOT > ./${GFB_FOLDER}/scripts/package.sh
 #!/bin/bash
 
 ###################################################
@@ -36,7 +36,7 @@ sudo /bin/systemctl enable grafana-server
 sudo /bin/systemctl start grafana-server
 EOT
 elif [[ ${IMAGE_FAMILY} =~ (centos|rocky) ]]; then
-  cat <<EOT > ./gcp/scripts/package.sh
+  cat <<EOT > ./${GFB_FOLDER}/scripts/package.sh
 #!/bin/bash
 
 ###################################################

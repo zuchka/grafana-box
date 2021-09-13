@@ -15,11 +15,11 @@ provider "google" {
 }
 
 resource "google_compute_address" "ip_address" {
-  name = "grafana-address"
+  name = "ip-${var.name}"
 }
 
 resource "google_compute_firewall" "default" {
-  name    = "grafana-port"
+  name    = "firewall-${var.name}"
   network = "default"
 
   allow {
@@ -29,7 +29,7 @@ resource "google_compute_firewall" "default" {
 }
 
 resource "google_compute_instance" "instance_with_ip" {
-  name         = "grafana-box"
+  name         = "instance-${var.name}"
   machine_type = "${var.machine_type}-standard-${var.cpu_count}"
 
   provisioner "remote-exec" {
