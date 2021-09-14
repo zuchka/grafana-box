@@ -1,20 +1,16 @@
 #!/bin/bash
 
-# copy template into new folder for box
-GFB_FOLDER=$(date +%s)
-cp -r ./gcp ./${GFB_FOLDER}
+# run init script to copy template & set directory variables 
+# OR destroy boxes on "destroy"
+. ./init.sh
 
-# source helper functions
+# source helper functions AFTER init script
 for helper in ./helpers/*.sh; do
   . "${helper}"
 done
 
-# validate args
-if [[ "${1}" =~ ^destroy$ ]]; then
-  terraform -chdir=${GFB_FOLDER}/ destroy
-  exit
-fi
 
+# validate args
 while getopts ":d:w: :a :n:" o; do
   validateArgs
 done

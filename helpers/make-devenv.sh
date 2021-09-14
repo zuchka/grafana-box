@@ -51,8 +51,8 @@ git clone https://github.com/canha/golang-tools-install-script.git
 # install docker
 curl -fsSL https://get.docker.com -o get-docker.sh
 sudo sh get-docker.sh
-# sudo usermod -aG docker grafana
-# su - grafana
+sudo usermod -aG docker grafana
+su - grafana
 
 # clone grafana/grafana repo
 git clone https://github.com/grafana/grafana.git
@@ -123,8 +123,8 @@ git clone https://github.com/canha/golang-tools-install-script.git
 # install docker
 curl -fsSL https://get.docker.com -o get-docker.sh
 sudo sh get-docker.sh
-# sudo usermod -aG docker ${USER}
-# su - ${USER}
+sudo usermod -aG docker grafana
+su - grafana
 
 # clone grafana/grafana repo
 git clone https://github.com/grafana/grafana.git
