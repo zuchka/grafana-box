@@ -25,7 +25,7 @@ cd /home/grafana || return
 sudo apt-get update -y
 sudo apt-get install -y wget tmux 
 
-# get binary (not the standalone)
+# get standalone binary
 wget https://dl.grafana.com/oss/release/grafana-${GF_VERSION}.linux-amd64.tar.gz
 tar -zxvf grafana-${GF_VERSION}.linux-amd64.tar.gz
 cd grafana-${GF_VERSION} || exit
@@ -33,7 +33,6 @@ cd grafana-${GF_VERSION} || exit
 # start binary in detached tmux session
 tmux new -d -s grafanaBinary
 tmux send-keys -t grafanaBinary.0 "./bin/grafana-server" ENTER
-
 EOT
 elif [[ ${IMAGE_FAMILY} =~ (centos|rocky) ]]; then
   cat <<EOT > ./"${GFB_FOLDER}"/scripts/binary.sh
