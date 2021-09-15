@@ -3,7 +3,7 @@
 # create new binary setup script with injected vars
 function makeBinary () {
   if [[ ${IMAGE_FAMILY} =~ (ubuntu|debian) ]]; then
-    cat <<EOT > ./${GFB_FOLDER}/scripts/binary.sh
+    cat <<EOT > ./"${GFB_FOLDER}"/scripts/binary.sh
 #!/bin/bash
 
 ###################################################
@@ -19,24 +19,24 @@ function makeBinary () {
 ###################################################
 
 # make sure we are home
-cd /home/grafana
+cd /home/grafana || return
 
 # packages
 sudo apt-get update -y
-# sudo apt-get upgrade -y
-sudo apt-get install -y adduser libfontconfig1 wget
+sudo apt-get install -y wget tmux 
 
 # get binary (not the standalone)
-wget https://dl.grafana.com/oss/release/grafana_${GF_VERSION}_amd64.deb
-sudo dpkg -i grafana_${GF_VERSION}_amd64.deb
+wget https://dl.grafana.com/oss/release/grafana-${GF_VERSION}.linux-amd64.tar.gz
+tar -zxvf grafana-${GF_VERSION}.linux-amd64.tar.gz
+cd grafana-${GF_VERSION} || exit
 
-# add to systemd and start
-sudo /bin/systemctl daemon-reload
-sudo /bin/systemctl enable grafana-server
-sudo /bin/systemctl start grafana-server
+# start binary in detached tmux session
+tmux new -d -s grafanaBinary
+tmux send-keys -t grafanaBinary.0 "./bin/grafana-server" ENTER
+
 EOT
 elif [[ ${IMAGE_FAMILY} =~ (centos|rocky) ]]; then
-  cat <<EOT > ./${GFB_FOLDER}/scripts/binary.sh
+  cat <<EOT > ./"${GFB_FOLDER}"/scripts/binary.sh
 #!/bin/bash
 
 ###################################################
@@ -52,16 +52,19 @@ elif [[ ${IMAGE_FAMILY} =~ (centos|rocky) ]]; then
 ###################################################
 
 # make sure we are home
-cd /home/grafana
+cd /home/grafana || return
 
 # get binary (not the standalone)
-# sudo yum update -y
-sudo yum install -y https://dl.grafana.com/oss/release/grafana-${GF_VERSION}-1.x86_64.rpm
+sudo yum install -y wget tmux
 
-# add to systemd and start
-sudo /bin/systemctl daemon-reload
-sudo /bin/systemctl enable grafana-server
-sudo /bin/systemctl start grafana-server
+# get standalone binary
+wget https://dl.grafana.com/oss/release/grafana-${GF_VERSION}.linux-amd64.tar.gz
+tar -zxvf grafana-${GF_VERSION}.linux-amd64.tar.gz
+cd grafana-${GF_VERSION} || exit
+
+# start binary in detached tmux session
+tmux new -d -s grafanaBinary
+tmux send-keys -t grafanaBinary.0 "./bin/grafana-server" ENTER
 EOT
 fi
 }

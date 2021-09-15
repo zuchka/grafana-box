@@ -1,16 +1,17 @@
 #!/bin/bash
 
 # getops arg-parsing logic
-function usage() { printf "\n%b\n" "Usage: $0 [-d <distro>] [-w <workflow>] [optional: -a <FLAG_ONLY> runs AMD processors instead of default Intel]\n" 1>&2; exit 1; }
+function usage () { 
+    printf "\n%b\n" "Usage: $0 [-d <distro>] [-w <workflow>] [optional: -a <FLAG_ONLY> runs AMD processors instead of default Intel]\n" 1>&2; exit 1; 
+}
 
 function validateArgs () {
-    case "${o}" in
+    case "$1" in
         d)
             d="${OPTARG}"
             #pattern-match the argument against a list in a file           
-            if ! [[ "${d}" =~ $(echo ^\($(paste -sd'|' ./helpers/distro-list)\)$) ]]; then
-                # echo -e "You have not chosen a valid distro.\nPlease choose one from the following list:\n"
-                printf "%b" "\nYou have not chosen a valid distro.\n\n" "Please choose one from the following list:\n\n"
+            if ! [[ "${d}" =~ $(paste -sd'|' ./helpers/distro-list) ]]; then
+                printf "%b\n\n" "\nYou have not chosen a valid distro" "Please choose one from the following list:"
                 cat ./helpers/distro-list
                 printf "%b\n\n" ""
                 usage
@@ -55,7 +56,7 @@ function validateArgs () {
             ;;
         n)
             NODE_VERSION="${OPTARG}"
-            if ! [[ "${NODE_VERSION}" =~ $(echo ^\($(paste -sd'|' ./helpers/nvm-remote-versions)\)$) ]]; then
+            if ! [[ "${NODE_VERSION}" =~ $(paste -sd'|' ./helpers/nvm-remote-versions) ]]; then
                 printf "%b" "You have not chosen a valid node version.\nPlease choose one from the following list:\n"
                 cat ./helpers/nvm-remote-versions
                 printf "%b\n" ""
@@ -110,7 +111,8 @@ function nullCheck () {
     fi  
 }
 function printValues () {
-    # report this with ip at end?
+    MACHINE_IP=$(terraform -chdir="${GFB_FOLDER}"/ output -raw instance_ip)
+
     printf "\n%s:%30s\n\n" "current configuration" "VALID "
     printf "%21b:%30b\n" \
     "gcp_machine_type"  "${MACHINE_TYPE} " \

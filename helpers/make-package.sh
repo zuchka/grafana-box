@@ -3,7 +3,7 @@
 # create new package setup script with injected vars
 function makePackage () {
   if [[ ${IMAGE_FAMILY} =~ (ubuntu|debian) ]]; then
-    cat <<EOT > ./${GFB_FOLDER}/scripts/package.sh
+    cat <<EOT > ./"${GFB_FOLDER}"/scripts/package.sh
 #!/bin/bash
 
 ###################################################
@@ -20,15 +20,15 @@ function makePackage () {
 
 # packages
 cd /home/grafana
-sudo -S -k apt-get update  -y
-# sudo -S -k apt-get upgrade -y
-sudo -S -k apt-get install -y software-properties-common apt-transport-https wget adduser libfontconfig1
+sudo apt-get update -y
+sudo apt-get install -y apt-transport-https 
+sudo apt-get install -y software-properties-common wget
 
 # install grafana
 wget -q -O - https://packages.grafana.com/gpg.key | sudo apt-key add -
 echo "deb https://packages.grafana.com/oss/deb stable main" | sudo tee -a /etc/apt/sources.list.d/grafana.list
-sudo -S -k apt-get update  -y
-sudo -S -k apt-get install -y grafana
+sudo apt-get update  -y
+sudo apt-get install -y grafana
 
 # add to systemd and start
 sudo /bin/systemctl daemon-reload
@@ -36,7 +36,7 @@ sudo /bin/systemctl enable grafana-server
 sudo /bin/systemctl start grafana-server
 EOT
 elif [[ ${IMAGE_FAMILY} =~ (centos|rocky) ]]; then
-  cat <<EOT > ./${GFB_FOLDER}/scripts/package.sh
+  cat <<EOT > ./"${GFB_FOLDER}"/scripts/package.sh
 #!/bin/bash
 
 ###################################################
@@ -68,7 +68,7 @@ sslverify=1
 sslcacert=/etc/pki/tls/certs/ca-bundle.crt
 EOG
 
-# sudo yum update -y
+sudo yum update -y grafana
 sudo yum install -y grafana
 
 sudo /bin/systemctl daemon-reload
