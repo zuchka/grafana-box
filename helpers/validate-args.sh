@@ -10,7 +10,7 @@ function validateArgs () {
         d)
             d="${OPTARG}"
             #pattern-match the argument against a list in a file           
-            if ! [[ "${d}" =~ $(paste -sd'|' ./helpers/distro-list) ]]; then
+            if ! [[ "${d}" =~ ^$(paste -sd'|' ./helpers/distro-list)$ ]]; then
                 printf "%b\n\n" "\nYou have not chosen a valid distro" "Please choose one from the following list:"
                 cat ./helpers/distro-list
                 printf "%b\n\n" ""
@@ -56,7 +56,7 @@ function validateArgs () {
             ;;
         n)
             NODE_VERSION="${OPTARG}"
-            if ! [[ "${NODE_VERSION}" =~ $(paste -sd'|' ./helpers/nvm-remote-versions) ]]; then
+            if ! [[ "${NODE_VERSION}" =~ ^$(paste -sd'|' ./helpers/nvm-remote-versions)$ ]]; then
                 printf "%b" "You have not chosen a valid node version.\nPlease choose one from the following list:\n"
                 cat ./helpers/nvm-remote-versions
                 printf "%b\n" ""
