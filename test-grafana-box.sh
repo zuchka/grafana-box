@@ -4,34 +4,21 @@
 
 # run init script to copy template & set directory variables 
 # OR destroy boxes on "destroy"
-. init.sh
+. test-init.sh
 
 # source helper functions AFTER init script
 for helper in helpers/*.sh; do
   . "${helper}"
 done
 
-# validate args
-while getopts ":d:w: :a :n:" o; do
-  validateArgs "${o}"
-done
-
-shift "$((OPTIND-1))"
-
-# check for valid branch and nulls
-validateBranch
-nullCheck
-
-# generate provisioning scripts and terraform.tfvars
-makeBinary
-makePackage
-makeDevenv
-makeTfvars
+makeTfvarsTest
+testDebPackage
+testRpmPackage
 
 # kick off terraform build
 terraform -chdir="${GFB_FOLDER}"/ init
 terraform -chdir="${GFB_FOLDER}"/ apply -auto-approve
 # terraform -chdir=${GFB_FOLDER}/ show
 
-# print the VM ip + metadata
-printValues
+# blackbox test grafana login page
+testPackage

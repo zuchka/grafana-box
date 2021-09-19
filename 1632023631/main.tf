@@ -15,11 +15,13 @@ provider "google" {
 
 resource "google_compute_address" "ip_address" {
   name     = "ip-${var.name}"
+  for_each = local.dist
 }
 
 resource "google_compute_firewall" "default" {
   name     = "firewall-${var.name}"
   network  = "default"
+  for_each = local.dist
 
   allow {
     protocol = "tcp"
@@ -28,6 +30,7 @@ resource "google_compute_firewall" "default" {
 }
 
 resource "google_compute_instance" "instance_with_ip" {
+  for_each     = local.dist
   name         = "instance-${var.name}"
   machine_type = "${var.machine_type}-standard-${var.cpu_count}"
 
@@ -52,7 +55,7 @@ resource "google_compute_instance" "instance_with_ip" {
   network_interface {
     network = "default"
     access_config {
-      nat_ip = google_compute_address.ip_address.address
+      nat_ip = google_compute_address.ip_address[each.key].address
     }
   }
 
@@ -63,5 +66,5 @@ resource "google_compute_instance" "instance_with_ip" {
 
 # print ip address to console here?
 output "instance_ip" {
-  value = google_compute_address.ip_address.address
+  value = google_compute_address.ip_address[*]
 }

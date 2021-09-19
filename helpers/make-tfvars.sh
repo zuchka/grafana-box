@@ -13,3 +13,10 @@ cpu_count            = "${CPU_COUNT}"
 name                 = "${GFB_FOLDER}"
 EOT
 }
+
+function makeTfvarsTest () {
+  cat <<EOT > ./"${GFB_FOLDER}"/terraform.tfvars
+gce_ssh_pub_key_file = "${GRAFANA_BOX_SSH}"
+name                 = "${GFB_FOLDER}"
+EOT
+}

@@ -19,7 +19,7 @@ function makePackage () {
 ###################################################
 
 # packages
-cd /home/grafana
+cd /home/grafana || exit
 sudo apt-get update -y
 sudo apt-get install -y apt-transport-https 
 sudo apt-get install -y software-properties-common wget
@@ -52,7 +52,7 @@ elif [[ ${IMAGE_FAMILY} =~ (centos|rocky) ]]; then
 ###################################################
 
 # make sure we are home
-cd /home/grafana
+cd /home/grafana || exit
 
 sudo bash -c "cat > /etc/yum.repos.d/grafana.repo" <<"EOG"
 #!/bin/bash
