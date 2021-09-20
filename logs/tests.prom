@@ -1,0 +1,9 @@
+grafana_box_up{ip="104.154.183.3",test="1632107068"} 1
+grafana_box_up{ip="34.72.125.67",test="1632107068"} 1
+grafana_box_up{ip="34.136.251.211",test="1632107068"} 1
+grafana_box_up{ip="34.66.68.15",test="1632107068"} 1
+grafana_box_up{ip="35.194.17.95",test="1632107068"} 1
+grafana_box_up{ip="34.122.211.28",test="1632107068"} 1
+grafana_box_up{ip="104.154.43.27",test="1632107068"} 1
+grafana_box_duration_seconds 179
+grafana_box_last_run_seconds 1632107247

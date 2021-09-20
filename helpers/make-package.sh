@@ -20,15 +20,17 @@ function makePackage () {
 
 # packages
 cd /home/grafana || exit
-sudo apt-get update -y
-sudo apt-get install -y apt-transport-https 
+sudo apt-get install grafana=7.5.1
+sudo apt-get install -y apt-transport-https
 sudo apt-get install -y software-properties-common wget
 
-# install grafana
 wget -q -O - https://packages.grafana.com/gpg.key | sudo apt-key add -
 echo "deb https://packages.grafana.com/oss/deb stable main" | sudo tee -a /etc/apt/sources.list.d/grafana.list
+
 sudo apt-get update  -y
-sudo apt-get install -y grafana
+sudo apt-get install -y grafana=7.5.1
+sudo apt-get clean
+sudo apt-get upgrade -y grafana
 
 # add to systemd and start
 sudo /bin/systemctl daemon-reload
@@ -69,7 +71,8 @@ sslcacert=/etc/pki/tls/certs/ca-bundle.crt
 EOG
 
 sudo yum update -y grafana
-sudo yum install -y grafana
+sudo yum install -y grafana-7.5.1
+sudo yum update -y grafana
 
 sudo /bin/systemctl daemon-reload
 sudo /bin/systemctl enable grafana-server
