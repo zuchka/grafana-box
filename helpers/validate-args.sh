@@ -83,7 +83,9 @@ function validateBranch () {
         BRANCH=$(echo "${BRANCH}" | cut -c 8-)
         printf "\n%b\n" "checking existence of remote branch '${BRANCH}'"
         
-        BRANCH_VAL=$(git ls-remote --heads git@github.com:grafana/grafana.git "${BRANCH}" | wc -l)
+        # use https instead of ssh so users don't need that configured for GitHub
+        # $(git ls-remote --heads git@github.com:grafana/grafana.git ...)
+        BRANCH_VAL=$(git ls-remote --heads https://github.com/grafana/grafana.git "${BRANCH}" | wc -l)
 
         if [[ "${BRANCH_VAL}" == 0 ]]; then
             printf "\n%b\n" "'${BRANCH}' is not a valid remote branch. please try again"

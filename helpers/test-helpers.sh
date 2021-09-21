@@ -6,7 +6,8 @@ function testPackage () {
         > "${GFB_FOLDER}/ip.txt"
     
     while read -r IP; do
-        LOGIN_CHECK=$(curl -s http://"$IP":3000 | grep -c "login")
+        # one http request to check grafana existence and version upgrade to 8.*
+        LOGIN_CHECK=$(curl -s http://"$IP":3000/api/health | jq '.version'| grep -c "8.*")
         if [ "$LOGIN_CHECK" == 1 ] ; then
             printf "%33b ................. %b\n" \
             "checking for Grafana login page" "SUCCESS\n" \
