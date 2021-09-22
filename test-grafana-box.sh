@@ -15,12 +15,14 @@ done
 makeTfvarsTest
 testDebPackage
 testRpmPackage
+# testPackageHash
 
 # kick off terraform build
 terraform -chdir="${GFB_FOLDER}"/ init
 terraform -chdir="${GFB_FOLDER}"/ apply -auto-approve
 # terraform -chdir=${GFB_FOLDER}/ show
 
-# blackbox test grafana login page
-testPackage
+# testPackage
 exportMetrics "${START_TIME}"
+
+terraform -chdir="${GFB_FOLDER}"/ destroy -auto-approve

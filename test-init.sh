@@ -12,7 +12,11 @@ elif [[ "${1}" =~ ^package$ ]]; then
   # will need new logic to set $workflow dynamically
   GFB_FOLDER=$(date +%s)
   cp -r ./gcp-test ./"${GFB_FOLDER}"
+elif [[ "${1}" =~ ^checksum$ ]]; then 
+  GFB_FOLDER=$(date +%s)
+  cp -r ./gcp-test-checksum ./"${GFB_FOLDER}"
 else
+  echo "not a valid workflow"
   exit
 fi
 
