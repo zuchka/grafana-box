@@ -48,11 +48,9 @@ func setupRouter() *gin.Engine {
 
 		if c.Bind(&foo) == nil {
 			fmt.Printf("\nFoo is %s; Result is %s\n", foo.Foo, foo.Result)
-			fmt.Printf(foo.Result)
 			baz := fmt.Sprintf("grafana_box_up{id=\"%s\",ip=\"%s\",zone=\"%s\"} \"%s\"\n", foo.Id, foo.Foo, foo.Result, foo.Test)
 			c.JSON(http.StatusOK, gin.H{"status": "ok"})
 
-			// var file string = json.MarshalIndent(foo, "", " ")
 			f, err := os.OpenFile("text.log",
 				os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 			if err != nil {
@@ -63,7 +61,6 @@ func setupRouter() *gin.Engine {
 			if _, err := f.WriteString(baz); err != nil {
 				log.Println(err)
 			}
-			// _ = ioutil.WriteFile("test.json", file, 0644)
 		}
 	})
 

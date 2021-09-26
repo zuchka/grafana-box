@@ -1,59 +1,39 @@
 ## grafana-box
 
-### quickstart
+### Introduction
+
+Use `grafana-box.sh` to bootstrap Grafana on GCP Virtual Machines. With one command, you can build Grafana from a native package manager, a standalone binary, or from source in a fully-functioning developer environment (on any remote branch, with any version of NodeJS).
+
+`test-grafana-box.sh` is a wrapper script for larger tests. It currently only tests package-manager related issues.
+
+## Prerequisites
+
+* a GCP account
+* `gcloud` installed and configured
+    * `gcloud auth application-default` enabled
+        * run `gcloud auth application-default login`
+* Terraform 1.0.7 installed
+* An `ssh` key pair
+
+## Quickstart
 
 * clone this repo and move into the project's root directory
-* export path to a public ssh key
-* export path to your GCP service acct json
-* choose a distro from this list.
-* choose one of the three following workflows:
-* run `./grafana-box -d <DISTRO> -w <WORKFLOW>`:
-    * `./grafana-box.sh -d ubuntu-2004-lts -w package`
-    * `./grafana-box.sh -d rocky-linux-8 -w devenv -a` # builds from default remote branch `main`
-    * `./grafana-box.sh -d rocky-linux-8 -w devenv-remote-branch-foo -a` # builds from specified remote branch `remote-branch-foo`
-    * `./grafana-box.sh -d centos-7 -w 7.5.7 -a`
-
-## How To Use `grafana-box`
-
-### choosing a distro
-### choosing a workflow
-
-grafana-box generates scripts and terraform plans based on arguments that you pass from the command line. You must always supply the  chosen `<DISTRO>` after the `-d` flag, and the chosen `<WORKFLOW>` after the `-w` flag. All other flags are optional.
-
-First, choose a distro from this list.
-
-Second, choose one of the three following workflows:
-
-1) package
-2) binary
-3) devenv
-
-### running grafana-box
-
-Here is the minimum acceptable pattern for running grafana-box:
+* export the path to a public ssh key as `GRAFANA_BOX_SSH`
+    * `export GRAFANA_BOX_SSH=~/.ssh/your-public-ssh-key.pub`
+* Build a `grafana-box`, choosing one value from each of the following columns: 
 
 ```
 ./grafana-box -d <DISTRO> -w <WORKFLOW>
 ```
 
-Consider the following command:
+box table here
 
-```
-./grafana-box.sh -d ubuntu-2004-lts -w package
-```
+test table here
 
-This will build a VM using GCP's official Ubuntu 20.04 LTS image. It will then provision Grafana using the `package` workflow, which installs Grafana from the native package manager (in this case, `APT`).
 
-The same workflow works with `yum`:
+Here are some example workflows:
 
-```
-./grafana-box.sh -d centos-7 -w package
-```
-
-You can pass the `-a` flag with no arguments. This flag is optional **but should appear last when used**. If passed, it will build your image on a VM using AMD processors (default=Intel). 
-
-This command builds a developer environment on Rocky Linux 8 on AMD processors:
-
-```
-./grafana-box.sh -d rocky-linux-8 -w devenv -a
-```
+* `./grafana-box.sh -d ubuntu-2004-lts -w package`
+* `./grafana-box.sh -d rocky-linux-8 -w devenv -a` # builds from default remote branch `main`
+* `./grafana-box.sh -d rocky-linux-8 -w devenv-remote-branch-foo -a` # builds from specified remote branch `remote-branch-foo`
+* `./grafana-box.sh -d centos-7 -w 7.5.7 -a`
