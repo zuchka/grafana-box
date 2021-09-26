@@ -22,10 +22,10 @@ variable "gce_ssh_user" {
 #   default = "package"
 # }
 
-variable machine_type {
+variable "machine_type" {
   default = "e2"
 }
 
-variable cpu_count {
+variable "cpu_count" {
   default = 2
 }

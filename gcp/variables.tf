@@ -20,10 +20,10 @@ variable "gce_ssh_pub_key_file" {}
 
 variable "image_project" {}
 
-variable image_family {}
+variable "image_family" {}
 
-variable build {}
+variable "build" {}
 
-variable machine_type {}
+variable "machine_type" {}
 
-variable cpu_count {}
+variable "cpu_count" {}

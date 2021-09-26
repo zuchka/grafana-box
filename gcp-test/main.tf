@@ -8,9 +8,9 @@ terraform {
 }
 
 provider "google" {
-  project     = var.project
-  region      = var.region
-  zone        = var.zone
+  project = var.project
+  region  = var.region
+  zone    = var.zone
 }
 
 locals {
@@ -22,7 +22,7 @@ locals {
     centos-7        = "centos-cloud"
     centos-8        = "centos-cloud"
     # centos-stream-8 = "centos-cloud"
-    rocky-linux-8   = "rocky-linux-cloud"
+    rocky-linux-8 = "rocky-linux-cloud"
   }
 }
 
@@ -50,7 +50,7 @@ resource "google_compute_instance" "instance_with_ip" {
 
 
   provisioner "remote-exec" {
-    script   = "./scripts/${each.value}-test.sh"
+    script = "./scripts/${each.value}-test.sh"
 
     connection {
       type = "ssh"
@@ -65,7 +65,7 @@ resource "google_compute_instance" "instance_with_ip" {
       size  = 25
     }
   }
-  
+
   network_interface {
     network = "default"
     access_config {

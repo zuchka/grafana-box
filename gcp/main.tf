@@ -8,18 +8,18 @@ terraform {
 }
 
 provider "google" {
-  project     = var.project
-  region      = var.region
-  zone        = var.zone
+  project = var.project
+  region  = var.region
+  zone    = var.zone
 }
 
 resource "google_compute_address" "ip_address" {
-  name     = "ip-${var.name}"
+  name = "ip-${var.name}"
 }
 
 resource "google_compute_firewall" "default" {
-  name     = "firewall-${var.name}"
-  network  = "default"
+  name    = "firewall-${var.name}"
+  network = "default"
 
   allow {
     protocol = "tcp"
@@ -33,7 +33,7 @@ resource "google_compute_instance" "instance_with_ip" {
 
 
   provisioner "remote-exec" {
-    script   = "./scripts/${var.build}.sh"
+    script = "./scripts/${var.build}.sh"
 
     connection {
       type = "ssh"
@@ -48,7 +48,7 @@ resource "google_compute_instance" "instance_with_ip" {
       size  = 25
     }
   }
-  
+
   network_interface {
     network = "default"
     access_config {
