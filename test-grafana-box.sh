@@ -25,4 +25,6 @@ terraform -chdir="${GFB_FOLDER}"/ apply -auto-approve
 # testPackage
 exportMetrics "${START_TIME}"
 
+if [[ "${1}" =~ ^checksum$ ]]; then
 terraform -chdir="${GFB_FOLDER}"/ destroy -auto-approve
+fi

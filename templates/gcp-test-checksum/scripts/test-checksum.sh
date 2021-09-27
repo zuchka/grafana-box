@@ -14,10 +14,10 @@ if ! [[ "${ACTUAL_FILE_SIZE}" == "${LISTED_FILE_SIZE}" ]]; then
     curl -X POST http://35.238.143.7:3000/admin \
     -H 'authorization: Basic Zm9vOmJhcg==' \
     -H 'content-type: application/json' \
-    -d '{"zone":"'"${ZONE}"'", "ip":"'"${IP}"'", "id":"'"${ID}"'", "test":"0"}'
+    -d '{"zone":"'"${ZONE}"'", "ip":"'"${IP}"'", "id":"'"${ID}"'"} 0'
 else
     curl -X POST http://35.238.143.7:3000/admin \
     -H 'authorization: Basic Zm9vOmJhcg==' \
     -H 'content-type: application/json' \
-    -d '{"zone":"'"${ZONE}"'", "ip":"'"${IP}"'", "id":"'"${ID}"'", "test":"1"}'
+    -d '{"zone":"'"${ZONE}"'", "ip":"'"${IP}"'", "id":"'"${ID}"'"} 1'
 fi

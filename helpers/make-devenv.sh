@@ -23,9 +23,11 @@ function makeDevenv () {
 cd /home/grafana || return
 
 # packages
-sudo apt-get update -y
-sudo apt-get upgrade -y build-essential libfontconfig1 wget adduser tmux git make
-sudo apt-get install -y build-essential libfontconfig1 wget adduser tmux git make
+
+sudo apt update -y
+sudo apt install -y build-essential 
+sudo apt install -y libfontconfig1 
+sudo apt install -y wget adduser tmux git
 
 # raise open file limit
 ulimit -S -n 2048
@@ -38,18 +40,29 @@ wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
 
 # install node
 nvm install ${NODE_VERSION}
+. "/home/grafana/.bashrc"
 
 # install yarn
 npm install --global yarn
 
 # install go
 git clone https://github.com/canha/golang-tools-install-script.git
-. ./golang-tools-install-script/goinstall.sh
-. /home/grafana/.bashrc
+. "./golang-tools-install-script/goinstall.sh"
+. "/home/grafana/.bashrc"
 
 # install docker
 curl -fsSL https://get.docker.com -o get-docker.sh
 sudo sh get-docker.sh
+
+# add docker to systemd 
+sudo systemctl enable docker.service
+sudo systemctl enable containerd.service
+sudo systemctl start docker.service
+sudo systemctl start containerd.service
+
+# install docker-compose
+sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-Linux-x86_64" -o /usr/bin/docker-compose
+sudo chmod +x /usr/bin/docker-compose
 
 # clone grafana/grafana repo
 git clone https://github.com/grafana/grafana.git
@@ -60,10 +73,15 @@ git config --global core.autocrlf input
 git checkout -b test-${BRANCH} origin/${BRANCH}
 git pull
 
+# build devenv DBs
+. "/home/grafana/.bashrc"
+sudo make devenv sources=${DUMMY_DBS}
+
+# tmux new -d -s grafanaData
+# tmux send-keys -t grafanaData.0 "sudo make devenv sources=${DUMMY_DBS}" ENTER
+
 # run yarn install
 yarn install --pure-lockfile
-
-# start devenv dummy DBs based on input
 
 # start frontend in tmux session
 tmux new -d -s grafanaFrontend
@@ -108,10 +126,11 @@ ulimit -S -n 2048
 wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
 [ -s "/home/grafana/.nvm/nvm.sh" ] && \. "/home/grafana/.nvm/nvm.sh"  # This loads nvm
 [ -s "/home/grafana/.nvm/bash_completion" ] && \. "/home/grafana/.nvm/bash_completion"  # This loads nvm .nvm/bash_completion
-. /home/grafana/.bashrc
+. "/home/grafana/.bashrc"
 
 # install node
 nvm install ${NODE_VERSION}
+. "/home/grafana/.bashrc"
 
 # install yarn
 npm install --global yarn
@@ -119,11 +138,21 @@ npm install --global yarn
 # install go
 git clone https://github.com/canha/golang-tools-install-script.git
 . ./golang-tools-install-script/goinstall.sh
-. /home/grafana/.bashrc
+. "/home/grafana/.bashrc"
 
 # install docker
 curl -fsSL https://get.docker.com -o get-docker.sh
 sudo sh get-docker.sh
+
+# add docker to systemd 
+sudo systemctl enable docker.service
+sudo systemctl enable containerd.service
+sudo systemctl start docker.service
+sudo systemctl start containerd.service
+
+# install docker-compose
+sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-Linux-x86_64" -o /usr/bin/docker-compose
+sudo chmod +x /usr/bin/docker-compose
 
 # clone grafana/grafana repo
 git config --global core.autocrlf input
@@ -144,6 +173,10 @@ tmux send-keys -t grafanaFrontend.0 "yarn start" ENTER
 # start backend in tmux session
 tmux new -d -s grafanaBackend
 tmux send-keys -t grafanaBackend.0 "make run" ENTER
+
+# build devenv DBs
+. "/home/grafana/.bashrc"
+sudo make devenv sources=${DUMMY_DBS}
 EOT
   elif [[ ${IMAGE_FAMILY} =~ (centos|rocky) ]]; then
   cat <<EOT > ./"${GFB_FOLDER}"/scripts/devenv.sh
@@ -180,18 +213,29 @@ wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
 
 # install node
 nvm install ${NODE_VERSION}
+. "/home/grafana/.bashrc"
 
 # install yarn
 npm install --global yarn
 
 # install go
 git clone https://github.com/canha/golang-tools-install-script.git
-. ./golang-tools-install-script/goinstall.sh
-. /home/grafana/.bashrc
+. "./golang-tools-install-script/goinstall.sh"
+. "/home/grafana/.bashrc"
 
 # install docker
 curl -fsSL https://get.docker.com -o get-docker.sh
 sudo sh get-docker.sh
+
+# add docker to systemd 
+sudo systemctl enable docker.service
+sudo systemctl enable containerd.service
+sudo systemctl start docker.service
+sudo systemctl start containerd.service
+
+# install docker-compose
+sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-Linux-x86_64" -o /usr/bin/docker-compose
+sudo chmod +x /usr/bin/docker-compose
 
 # clone grafana/grafana repo
 git config --global core.autocrlf input
@@ -212,6 +256,10 @@ tmux send-keys -t grafanaFrontend.0 "yarn start" ENTER
 # start backend in tmux session
 tmux new -d -s grafanaBackend
 tmux send-keys -t grafanaBackend.0 "make run" ENTER
+
+# build devenv DBs
+. "/home/grafana/.bashrc"
+sudo make devenv sources=${DUMMY_DBS}
 EOT
 fi
 }

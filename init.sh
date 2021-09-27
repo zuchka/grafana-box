@@ -10,7 +10,7 @@ if [[ "${1}" =~ ^destroy$ ]]; then
   exit
 else 
   GFB_FOLDER=$(date +%s)
-  cp -r ./gcp ./"${GFB_FOLDER}"
+  cp -r ./templates/gcp ./"${GFB_FOLDER}"
 fi
 
 # add ./grafana-box.sh delete to remove folders with warning

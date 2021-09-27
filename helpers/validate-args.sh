@@ -67,6 +67,9 @@ function validateArgs () {
             MACHINE_TYPE="n2d"
             CPU="AMD"
             ;;
+        z)
+            DUMMY_DBS="${OPTARG}"
+            ;;
         *)
             usage
             ;;
@@ -126,7 +129,8 @@ function printValues () {
     "cpu"               "${CPU} " \
     "cpu_count"         "${CPU_COUNT} " \
     "ram"               "${RAM} " \
-    "disk"              "25gb\n" \
+    "disk"              "25gb " \
+    "dummy DBs"         "${DUMMY_DBS}\n" \
     "ssh access"        "ssh grafana@${MACHINE_IP} " \
     "browser access"    "http://${MACHINE_IP}:3000\n"
 }
