@@ -25,25 +25,34 @@ Use `grafana-box.sh` to bootstrap Grafana on GCP Virtual Machines. With one comm
 ```
 ./grafana-box -d <DISTRO> -w <WORKFLOW>
 ```
-|DISTRO (-d)   |WORKFLOW (-w)   |CPU (-a) (optional) (no args) (default=Intel) |NODE (-n)  (optional) (devenv only)|DATA (TK)  (optional) (devenv only)|
+|DISTRO (-d)|WORKFLOW (-w)|CPU (-a) (optional) (no args) (default=Intel)|NODE (-n)  (optional) (devenv only)|DATA (TK)  (optional) (devenv only)|
 |---|---|---|---|---|
-|`ubuntu-2004-lts `  |`package`   |`-a` (no args) = AMD   |use any valid `nvm` pattern. browse list here   |   |
+|`ubuntu-2004-lts `  |`package` (build from native package manager)  |`-a` (no args) = AMD   |use any valid `nvm` pattern. browse list here   |   |
 |`ubuntu-1804-lts`   |`7.5.1` (use `x.x.x` pattern for binary)   |default = Intel   |   |   |
-|`debian-11`   |`devenv` (defaults to `main`. Add `-remote_branch` to build from specific branch)   |   |   |   |
-|`debian-10`   |   |   |   |   |
-|`centos-7`   |   |   |   |   |
+|`debian-11`   |`devenv` (builds from `main`) |   |   |   |
+|`debian-10`   |`devenv-foo/bar` (builds from remote branch `foo/bar`)      |   |   |   |
 |`centos-8`   |   |   |   |   |
 |`centos-stream-8`   |   |   |   |   |
+|`centos-7`   |   |   |   |   |
 |`rocky-linux-8`   |   |   |   |   |
 
-box table here
 
-test table here
+Here are some example commands:
 
+Build Grafana on Ubuntu 20.04 using `apt`:
 
-Here are some example workflows:
+`./grafana-box.sh -d ubuntu-2004-lts -w package`
 
-* `./grafana-box.sh -d ubuntu-2004-lts -w package`
-* `./grafana-box.sh -d rocky-linux-8 -w devenv -a` # builds from default remote branch `main`
-* `./grafana-box.sh -d rocky-linux-8 -w devenv-remote-branch-foo -a` # builds from specified remote branch `remote-branch-foo`
-* `./grafana-box.sh -d centos-7 -w 7.5.7 -a`
+Build a Grafana Developer Environment from `main` on Rocky Linux 8 using AMD processors:
+
+`./grafana-box.sh -d rocky-linux-8 -w devenv -a`
+
+Build a Grafana Developer Environment from remote branch `foo/bar` using NodeJS version `15.16.0` on Debian 10
+
+`./grafana-box.sh -d debian-10 -w devenv-foo/bar -n 15.16.0` 
+
+Build the official Grafana version `7.5.7` standalone binary on CentOS 7:
+
+`./grafana-box.sh -d centos-7 -w 7.5.7 -a`
+
+## accessing your `grafana-box`
