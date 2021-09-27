@@ -25,6 +25,16 @@ Use `grafana-box.sh` to bootstrap Grafana on GCP Virtual Machines. With one comm
 ```
 ./grafana-box -d <DISTRO> -w <WORKFLOW>
 ```
+|DISTRO (-d)   |WORKFLOW (-w)   |CPU (-a) (optional) (no args) (default=Intel) |NODE (-n)  (optional) (devenv only)|DATA (TK)  (optional) (devenv only)|
+|---|---|---|---|---|
+|`ubuntu-2004-lts `  |`package`   |`-a` (no args) = AMD   |use any valid `nvm` pattern. browse list here   |   |
+|`ubuntu-1804-lts`   |`7.5.1` (use `x.x.x` pattern for binary)   |default = Intel   |   |   |
+|`debian-11`   |`devenv` (defaults to `main`. Add `-remote_branch` to build from specific branch)   |   |   |   |
+|`debian-10`   |   |   |   |   |
+|`centos-7`   |   |   |   |   |
+|`centos-8`   |   |   |   |   |
+|`centos-stream-8`   |   |   |   |   |
+|`rocky-linux-8`   |   |   |   |   |
 
 box table here
 
