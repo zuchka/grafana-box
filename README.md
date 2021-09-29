@@ -2,18 +2,19 @@
 
 ### Introduction
 
-Grafana Box is a collection of wrapper scripts for Terraform. Use `grafana-box.sh` to bootstrap Grafana instances on GCP virtual machines. With one command, you can build Grafana from a native package manager, a standalone binary, or from source in a fully-functioning developer environment (on any remote branch, with any version of NodeJS). 
+Grafana Box is a collection of wrapper scripts for Terraform. Use `grafana-box.sh` to bootstrap Grafana instances on GCP virtual machines. It was designed to quickly test and troubleshoot platform-specific issues. With one command, you can build Grafana from a native package manager, a standalone binary, or from source in a fully-functioning developer environment (on any remote branch, with any version of NodeJS and any dummy (`devenv`) datasource). 
 
 Additionaly, you may choose between eight different Linux distributions.
 
-`test-grafana-box.sh` is a wrapper script for larger tests. It currently only tests package-manager related issues.
+* nest test-grafana stuff and keep it aside as expiremental
 
 ## Prerequisites
 
 * a GCP account
 * `gcloud` installed and configured
-    * `gcloud auth application-default` enabled
-        * run `gcloud auth application-default login`
+* `gcloud auth application-default` enabled
+    * to enable this feature, run `gcloud auth application-default login`
+    * Visit [the gcloud docs](https://cloud.google.com/sdk/gcloud/reference/auth/application-default) for more details
 * Terraform 1.0.7 installed
 * An `ssh` key pair
 
@@ -22,11 +23,15 @@ Additionaly, you may choose between eight different Linux distributions.
 * clone this repo and move into the project's root directory
 * export the path to a public ssh key as `GRAFANA_BOX_SSH`
     * `export GRAFANA_BOX_SSH=~/.ssh/your-public-ssh-key.pub`
-* Build a `grafana-box`, choosing one value from each of the following columns: 
+    * for ease of use, consider adding this variable to your shell's `.*_profile` 
+* Build a `grafana-box`. At a minimum, you must include the `-d` and `-w` flags, each with an argument: 
 
 ```
 ./grafana-box -d <DISTRO> -w <WORKFLOW>
 ```
+
+Here is a list of acceptable arguments. All other flags are optional:
+
 |DISTRO (-d)|WORKFLOW (-w)|CPU (-a) (optional) (no args) (default=Intel)|NODE (-n)  (optional) (devenv only)|DATA (TK)  (optional) (devenv only)|
 |---|---|---|---|---|
 |`ubuntu-2004-lts `  |`package` (build from native package manager)  |`-a` (no args) = AMD   |use any valid `nvm` pattern. browse list here   |   |
@@ -39,7 +44,7 @@ Additionaly, you may choose between eight different Linux distributions.
 |`rocky-linux-8`   |   |   |   |   |
 
 
-Here are some example commands:
+## Example Commands
 
 Build Grafana on Ubuntu 20.04 using `apt`:
 
