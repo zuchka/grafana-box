@@ -8,7 +8,7 @@ function testPackage () {
     while read -r IP; do
         # one http request to check grafana existence and version upgrade to 8.*
         LOGIN_CHECK=$(curl -s http://"$IP":3000/api/health | jq '.version')
-        if [[ "$LOGIN_CHECK" =~ ^"\"8.*\""$ ]] ; then
+        if [[ "$LOGIN_CHECK" =~ ^"\"8" ]] ; then
             printf "%33b ................. %b\n" \
             "checking for Grafana login page" "SUCCESS\n" \
             "web login" "curl http://${IP}:3000" \
