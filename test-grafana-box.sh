@@ -15,7 +15,6 @@ done
 makeTfvarsTest
 testDebPackage
 testRpmPackage
-# testPackageHash
 
 # kick off terraform build
 terraform -chdir="${GFB_FOLDER}"/ init
@@ -26,5 +25,7 @@ terraform -chdir="${GFB_FOLDER}"/ apply -auto-approve
 exportMetrics "${START_TIME}"
 
 if [[ "${1}" =~ ^checksum$ ]]; then
-terraform -chdir="${GFB_FOLDER}"/ destroy -auto-approve
+  terraform -chdir="${GFB_FOLDER}"/ destroy -auto-approve
+else 
+  testPackage
 fi
