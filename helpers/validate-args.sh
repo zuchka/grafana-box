@@ -33,7 +33,7 @@ function validateArgs () {
             ;;
         w)
             w="${OPTARG}"
-            if ! [[ "${w}" =~ ^(devenv|package|[0-9]\.[0-9]\.[0-9]+) ]]; then
+            if ! [[ "${w}" =~ ^(e2e-binary|devenv|package|[0-9]\.[0-9]\.[0-9]+) ]]; then
                 printf "%b" "You have not chosen a valid workflow.\nPlease choose one from the following list:\n\n* package (if available, uses native package manager)\n* devenv  (fresh build from main branch. Grafana Frontend (yarn start) and Backend (make run) launched in detached Tmux sessions)\n* version (enter as 3 digits. -w 7.5.10, for example, will install Grafana version 7.5.10)\n"
                 usage
             elif [[ "${w}" =~ ^[0-9]\.[0-9]\.[0-9]+$ ]]; then
@@ -47,6 +47,12 @@ function validateArgs () {
                 BRANCH="${w}"
                 CPU_COUNT=8
                 RAM="16gb"
+            elif [[ "${w}" =~ ^e2e-binary ]]; then
+                WORKFLOW="e2e-binary"
+                BRANCH="${w}"
+                CPU_COUNT=8
+                RAM="16gb"
+                GF_VERSION="8.1.5"
             else
                 WORKFLOW="${w}"
                 CPU_COUNT=2
@@ -77,25 +83,38 @@ function validateArgs () {
 }
 
 function validateBranch () {
-    if [ -z "${BRANCH}" ]; then
+    if [ -z "${BRANCH}" ] && [[ "${WORKFLOW}" =~ "e2e-binary" ]]; then
+        printf "\n%b\n" "'please choose a release branch and try again"
+        usage
+    elif [ -z "${BRANCH}" ]; then
         BRANCH="n/a"
-    elif [[ "${BRANCH}" =~ ^devenv$ ]]; then
-        BRANCH="main"
-    else
-        # drop first seven characters of ${w} "devenv-"
-        BRANCH=$(echo "${BRANCH}" | cut -c 8-)
-        printf "\n%b\n" "checking existence of remote branch '${BRANCH}'"
-        
-        # use https instead of ssh so users don't need that configured for GitHub
-        # $(git ls-remote --heads git@github.com:grafana/grafana.git ...)
-        BRANCH_VAL=$(git ls-remote --heads https://github.com/grafana/grafana.git "${BRANCH}" | wc -l)
+    fi
 
-        if [[ "${BRANCH_VAL}" == 0 ]]; then
-            printf "\n%b\n" "'${BRANCH}' is not a valid remote branch. please try again"
-            usage
-        else 
-            printf "\n%b\n" "${BRANCH} found. Continuing..."
-        fi
+    if [[ "${BRANCH}" =~ ^devenv$ ]]; then
+        BRANCH="main"
+    elif [[ "${BRANCH}" =~ ^devenv- ]]; then
+        # drop first seven characters "devenv-"
+        BRANCH=$(echo "${BRANCH}" | cut -c 8-)
+        branchCheck
+    elif [[ "${BRANCH}" =~ ^e2e-binary- ]]; then
+        # drop first eleven characters "e2e-binary-"
+        BRANCH=$(echo "${BRANCH}" | cut -c 12-)
+        branchCheck
+    fi
+}
+
+function branchCheck () {
+    printf "\n%b\n" "checking existence of remote branch '${BRANCH}'"
+    
+    # use https instead of ssh so users don't need that configured for GitHub
+    # $(git ls-remote --heads git@github.com:grafana/grafana.git ...)
+    BRANCH_VAL=$(git ls-remote --heads https://github.com/grafana/grafana.git "${BRANCH}" | wc -l)
+
+    if [[ "${BRANCH_VAL}" == 0 ]]; then
+        printf "\n%b\n" "'${BRANCH}' is not a valid remote branch. please try again"
+        usage
+    else 
+        printf "\n%b\n" "${BRANCH} found. Continuing..."
     fi
 }
 
@@ -111,10 +130,11 @@ function nullCheck () {
         CPU="Intel"
     fi
 
-    if [[ -z "${NODE_VERSION}" && "${WORKFLOW}" =~ devenv ]]; then
+    if [[ -z "${NODE_VERSION}" && "${WORKFLOW}" =~ ^(devenv|e2e-binary) ]]; then
         NODE_VERSION="--lts"
     fi  
 }
+
 function printValues () {
     MACHINE_IP=$(terraform -chdir="${GFB_FOLDER}"/ output -raw instance_ip)
 
@@ -133,4 +153,10 @@ function printValues () {
     "dummy DBs"         "${DUMMY_DBS}\n" \
     "ssh access"        "ssh grafana@${MACHINE_IP} " \
     "browser access"    "http://${MACHINE_IP}:3000\n"
+    printf "%21b:%110b\n" \
+    "download e2e results" "scp \"grafana@${MACHINE_IP}:/home/grafana/grafana/packages/grafana-e2e/mochawesome-report/mochawesome.*\" .\n"
+}
+
+function printTestResults () {
+    scp "grafana@${MACHINE_IP}:/home/grafana/grafana/packages/grafana-e2e/mochawesome-report/mochawesome.json" . && cat ./mochawesome.json | jq -r '.stats'
 }

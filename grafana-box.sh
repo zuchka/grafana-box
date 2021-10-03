@@ -26,6 +26,7 @@ nullCheck
 makeBinary
 makePackage
 makeDevenv
+makeE2eBinary
 makeTfvars
 
 # kick off terraform build

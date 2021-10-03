@@ -68,7 +68,7 @@ sudo chmod +x /usr/bin/docker-compose
 git clone https://github.com/grafana/grafana.git
 
 # check out chosen branch
-cd /home/grafana/grafana || exit
+cd /home/grafana/grafana || return
 git config --global core.autocrlf input
 git checkout -b test-${BRANCH} origin/${BRANCH}
 git pull
@@ -76,9 +76,6 @@ git pull
 # build devenv DBs
 . "/home/grafana/.bashrc"
 sudo make devenv sources=${DUMMY_DBS}
-
-# tmux new -d -s grafanaData
-# tmux send-keys -t grafanaData.0 "sudo make devenv sources=${DUMMY_DBS}" ENTER
 
 # run yarn install
 yarn install --pure-lockfile
