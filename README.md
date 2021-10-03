@@ -6,8 +6,6 @@ Grafana Box is a collection of wrapper scripts for Terraform. Use `grafana-box.s
 
 Additionaly, you may choose between eight different Linux distributions.
 
-* nest test-grafana stuff and keep it aside as expiremental
-
 ## Prerequisites
 
 * a GCP account
@@ -52,7 +50,7 @@ Build Grafana on Ubuntu 20.04 using `apt`:
 
 Build a Grafana Developer Environment from `main` on Rocky Linux 8 using AMD processors:
 
-`./grafana-box.sh -d rocky-linux-8 -w devenv -a`
+`./grafana-box.sh -d centos-stream-8 -w devenv -a`
 
 Build a Grafana Developer Environment from remote branch `foo/bar` using NodeJS version `15.16.0` on Debian 10
 
@@ -60,6 +58,6 @@ Build a Grafana Developer Environment from remote branch `foo/bar` using NodeJS 
 
 Build the official Grafana version `7.5.7` standalone binary on CentOS 7:
 
-`./grafana-box.sh -d centos-7 -w 7.5.7 -a`
+`./grafana-box.sh -d rocky-linux-8 -w 7.5.7 -a`
 
 ## accessing your `grafana-box`
