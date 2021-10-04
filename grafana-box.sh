@@ -12,7 +12,7 @@ for helper in helpers/*.sh; do
 done
 
 # validate args
-while getopts ":d:w: :a :n: :z:" o; do
+while getopts ":d:w: :a :n: :z: :r:" o; do
   validateArgs "${o}"
 done
 

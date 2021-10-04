@@ -7,9 +7,8 @@ function makeE2eBinary () {
 #!/bin/bash
 
 # packages
-sudo apt-get update -y
-sudo apt install -y libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libgconf-2-4 
-sudo apt install -y libnss3 libxss1 libasound2 libxtst6 
+sudo apt update -y
+sudo apt install -y libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 libxtst6 
 sudo apt install -y xauth xvfb 
 sudo apt install -y wget adduser tmux git
 
@@ -43,11 +42,11 @@ nvm install ${NODE_VERSION}
 npm install --global yarn
 
 # clone grafana/grafana repo
+git config --global core.autocrlf input
 git clone https://github.com/grafana/grafana.git
 
 # check out chosen branch
 cd /home/grafana/grafana || return
-git config --global core.autocrlf input
 git checkout -b test-${BRANCH} origin/${BRANCH}
 git pull
 
@@ -145,19 +144,38 @@ git config --global core.autocrlf input
 git clone https://github.com/grafana/grafana.git
 
 # check out chosen branch
-cd /home/grafana/grafana || exit
+cd /home/grafana/grafana || return
 git checkout -b test-${BRANCH} origin/${BRANCH}
 git pull
+
+# replace cypress config so we can save JSON to file
+function makeCypressJson () {
+  cat <<EOF > ./packages/grafana-e2e/cypress.json
+{
+  "projectId": "zb7k1c",
+  "supportFile": "cypress/support/index.ts",
+  "reporter": "mochawesome",
+    "reporter-option": {  
+      "html": "false",
+      "json": "true"
+    }
+}
+EOF
+}
+
+makeCypressJson
 
 # run yarn install
 yarn install --pure-lockfile
 
+# add mochawesome to packages/grafana-e2e
+npm install --prefix ./packages/grafana-e2e mochawesome
+
 # use electron and not chrome for e2e tests
 sed -i 's/chrome/electron/' packages/grafana-e2e/package.json
 
-# start release e2e test in tmux session
-tmux new -d -s grafanaVerifyRelease
-tmux send-keys -t grafanaVerifyRelease.0 "./e2e/verify-release" ENTER
+# start release e2e test
+. ./e2e/verify-release
 
 EOT
   elif [[ ${IMAGE_FAMILY} =~ (centos|rocky) ]]; then
@@ -219,19 +237,38 @@ git config --global core.autocrlf input
 git clone https://github.com/grafana/grafana.git
 
 # check out chosen branch
-cd /home/grafana/grafana || exit
+cd /home/grafana/grafana || return
 git checkout -b test-${BRANCH} origin/${BRANCH}
 git pull
+
+# replace cypress config so we can save JSON to file
+function makeCypressJson () {
+  cat <<EOF > ./packages/grafana-e2e/cypress.json
+{
+  "projectId": "zb7k1c",
+  "supportFile": "cypress/support/index.ts",
+  "reporter": "mochawesome",
+    "reporter-option": {  
+      "html": "false",
+      "json": "true"
+    }
+}
+EOF
+}
+
+makeCypressJson
 
 # run yarn install
 yarn install --pure-lockfile
 
+# add mochawesome to packages/grafana-e2e
+npm install --prefix ./packages/grafana-e2e mochawesome
+
 # use electron and not chrome for e2e tests
 sed -i 's/chrome/electron/' packages/grafana-e2e/package.json
 
-# start release e2e test in tmux session
-tmux new -d -s grafanaVerifyRelease
-tmux send-keys -t grafanaVerifyRelease.0 "./e2e/verify-release" ENTER
+# start release e2e test
+. ./e2e/verify-release
 EOT
 fi
 }
