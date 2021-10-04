@@ -159,10 +159,9 @@ function printValues () {
     # e2e test instances run on 3001
     if [[ "${WORKFLOW}" =~ ^e2e-binary ]]; then
         printf "%21b:%30b\n" "browser access" "http://${MACHINE_IP}:3001\n"
+        printf "%21b:%149b\n" "download e2e results" \
+        "scp \"grafana@${MACHINE_IP}:/home/grafana/grafana/packages/grafana-e2e/mochawesome-report/mochawesome.*\" . && jq -r '.stats' < mochawesome.json\n"
     else
         printf "%21b:%30b\n" "browser access" "http://${MACHINE_IP}:3000\n"
     fi
-
-    printf "%21b:%149b\n" \
-    "download e2e results" "scp \"grafana@${MACHINE_IP}:/home/grafana/grafana/packages/grafana-e2e/mochawesome-report/mochawesome.*\" . && jq -r '.stats' < mochawesome.json\n"
 }
