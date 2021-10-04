@@ -48,7 +48,7 @@ Additionaly, you may build your Grafana Box using eight different Linux distribu
 ./grafana-box.sh -d rocky-linux-8 -w 8.1.5
 ```
 
-* Build a Grafana developer environment from `main` on Debian 10 using AMD processors:
+* Build a Grafana developer environment from `main` on CentOS Stream 8 using AMD processors:
 
 ```
 ./grafana-box.sh -d centos-stream-8 -w devenv -a
@@ -72,7 +72,7 @@ Additionaly, you may build your Grafana Box using eight different Linux distribu
 
 ## Full Option List
 
-|DISTRO (-d)|WORKFLOW (-w)|CPU (-a) (optional) (no args) (default=Intel)|NODE (-n)  (optional) (devenv only)|DATA (-z)  (optional) (devenv only)| RELEASE (-r) (required) (e2e-binary only)
+|DISTRO (-d)|WORKFLOW (-w)|CPU (-a) (optional) (no args) (default=Intel)|NODE (-n)  (optional) (`devenv`  and `release-e2e` only)|DATA (-z)  (optional) (devenv only)| RELEASE (-r) (required) (e2e-binary only)
 |---|---|---|---|---|---|
 |`ubuntu-2004-lts `  |`package`  |`-a` (no args) = AMD   |use any valid `nvm` pattern. browse list here   |any `devenv` dummy datasource. browse list here   |the official binary to test for release. required when using `e2e-binary` workflow
 |`ubuntu-1804-lts`   |`8.1.5` : use `x.x.x` pattern for standalone binary |   |   |   |use `x.x.x` pattern to specify binary
@@ -82,3 +82,7 @@ Additionaly, you may build your Grafana Box using eight different Linux distribu
 |`centos-8`| | | |
 |`centos-7`| | | |
 |`rocky-linux-8`| | | |
+
+## Interacting with Grafana-Box
+
+## Cleaning Up and Destroying Grafana-Box
