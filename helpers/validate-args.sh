@@ -76,6 +76,9 @@ function validateArgs () {
         z)
             DUMMY_DBS="${OPTARG}"
             ;;
+        r)
+            TEST_BINARY="${OPTARG}"
+            ;;
         *)
             usage
             ;;
