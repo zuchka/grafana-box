@@ -2,6 +2,9 @@
 
 # create new devenv setup script with injected vars
 function makeE2eBinary () {
+  # change this to reuse a function for DRY. 
+  # creat doc with initial repo-specific steps
+  # append larger heredoc below with universal steps
   if [[ ${IMAGE_FAMILY} =~ (ubuntu|debian) ]]; then
     cat <<EOT > ./"${GFB_FOLDER}"/scripts/e2e-binary.sh
 #!/bin/bash
@@ -56,19 +59,15 @@ function makeCypressJson () {
 {
   "projectId": "zb7k1c",
   "supportFile": "cypress/support/index.ts",
-  "reporter": "mochawesome",
-    "reporter-option": {  
-      "html": "false",
-      "json": "true"
-    }
+  "reporter": "@mochajs/json-file-reporter"
 }
 EOF
 }
 
 makeCypressJson
 
-# add mochawesome to packages/grafana-e2e
-npm install --prefix ./packages/grafana-e2e mochawesome
+# add mochajs json reporter to grafana's dev dependencies
+yarn add -W --dev @mochajs/json-file-reporter
 
 # run yarn install
 yarn install --pure-lockfile
@@ -154,19 +153,15 @@ function makeCypressJson () {
 {
   "projectId": "zb7k1c",
   "supportFile": "cypress/support/index.ts",
-  "reporter": "mochawesome",
-    "reporter-option": {  
-      "html": "false",
-      "json": "true"
-    }
+  "reporter": "@mochajs/json-file-reporter"
 }
 EOF
 }
 
 makeCypressJson
 
-# add mochawesome to packages/grafana-e2e
-npm install --prefix ./packages/grafana-e2e mochawesome
+# add mochajs json reporter to grafana's dev dependencies
+yarn add -W --dev @mochajs/json-file-reporter
 
 # run yarn install
 yarn install --pure-lockfile
@@ -247,19 +242,15 @@ function makeCypressJson () {
 {
   "projectId": "zb7k1c",
   "supportFile": "cypress/support/index.ts",
-  "reporter": "mochawesome",
-    "reporter-option": {  
-      "html": "false",
-      "json": "true"
-    }
+  "reporter": "@mochajs/json-file-reporter"
 }
 EOF
 }
 
 makeCypressJson
 
-# add mochawesome to packages/grafana-e2e
-npm install --prefix ./packages/grafana-e2e mochawesome
+# add mochajs json reporter to grafana's dev dependencies
+yarn add -W --dev @mochajs/json-file-reporter
 
 # run yarn install
 yarn install --pure-lockfile
