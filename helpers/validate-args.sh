@@ -86,15 +86,11 @@ function validateArgs () {
 }
 
 function validateBranch () {
-    if [ -z "${BRANCH}" ] && [[ "${WORKFLOW}" =~ "e2e-binary" ]]; then
-        printf "\n%b\n" "'please choose a release branch and try again"
-        usage
-    elif [ -z "${BRANCH}" ]; then
-        BRANCH="n/a"
-    fi
-
     if [[ "${BRANCH}" =~ ^devenv$ ]]; then
         BRANCH="main"
+    elif [[ "${BRANCH}" =~ ^e2e-binary$ ]]; then
+        echo "please choose a remote branch: e2e-binary-v8.2.x"
+        usage
     elif [[ "${BRANCH}" =~ ^devenv- ]]; then
         # drop first seven characters "devenv-"
         BRANCH=$(echo "${BRANCH}" | cut -c 8-)
@@ -160,7 +156,7 @@ function printValues () {
     if [[ "${WORKFLOW}" =~ ^e2e-binary ]]; then
         printf "%21b:%30b\n" "browser access" "http://${MACHINE_IP}:3001\n"
         printf "%21b:%149b\n" "download e2e results" \
-        "scp \"grafana@${MACHINE_IP}:/home/grafana/grafana/packages/grafana-e2e/mochawesome-report/mochawesome.*\" . && jq -r '.stats' < mochawesome.json\n"
+        "scp \"grafana@${MACHINE_IP}:/home/grafana/grafana/packages/grafana-e2e/mochawesome-report/mochawesome.json\" . && jq -r '.stats' < mochawesome.json\n"
     else
         printf "%21b:%30b\n" "browser access" "http://${MACHINE_IP}:3000\n"
     fi

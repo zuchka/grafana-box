@@ -67,11 +67,11 @@ EOF
 
 makeCypressJson
 
-# run yarn install
-yarn install --pure-lockfile
-
 # add mochawesome to packages/grafana-e2e
 npm install --prefix ./packages/grafana-e2e mochawesome
+
+# run yarn install
+yarn install --pure-lockfile
 
 # use electron and not chrome for e2e tests
 sed -i 's/chrome/electron/' packages/grafana-e2e/package.json
@@ -165,11 +165,11 @@ EOF
 
 makeCypressJson
 
-# run yarn install
-yarn install --pure-lockfile
-
 # add mochawesome to packages/grafana-e2e
 npm install --prefix ./packages/grafana-e2e mochawesome
+
+# run yarn install
+yarn install --pure-lockfile
 
 # use electron and not chrome for e2e tests
 sed -i 's/chrome/electron/' packages/grafana-e2e/package.json
@@ -258,11 +258,11 @@ EOF
 
 makeCypressJson
 
-# run yarn install
-yarn install --pure-lockfile
-
 # add mochawesome to packages/grafana-e2e
 npm install --prefix ./packages/grafana-e2e mochawesome
+
+# run yarn install
+yarn install --pure-lockfile
 
 # use electron and not chrome for e2e tests
 sed -i 's/chrome/electron/' packages/grafana-e2e/package.json
