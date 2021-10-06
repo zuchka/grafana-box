@@ -13,5 +13,3 @@ else
   cp -r ./templates/gcp ./"${GFB_FOLDER}"
   mkdir ./"${GFB_FOLDER}"/scripts
 fi
-
-# add ./grafana-box.sh delete to remove folders with warning
