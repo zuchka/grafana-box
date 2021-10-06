@@ -33,10 +33,10 @@ function validateArgs () {
             ;;
         w)
             w="${OPTARG}"
-            if ! [[ "${w}" =~ ^(e2e-binary|devenv|package|[0-9]\.[0-9]\.[0-9]+) ]]; then
+            if ! [[ "${w}" =~ ^(e2e-binary|devenv|package|[0-9]\.[0-9]\.[0-9]) ]]; then
                 printf "%b" "You have not chosen a valid workflow.\nPlease choose one from the following list:\n\n* package (if available, uses native package manager)\n* devenv  (fresh build from main branch. Grafana Frontend (yarn start) and Backend (make run) launched in detached Tmux sessions)\n* version (enter as 3 digits. -w 7.5.10, for example, will install Grafana version 7.5.10)\n"
                 usage
-            elif [[ "${w}" =~ ^[0-9]\.[0-9]\.[0-9]+$ ]]; then
+            elif [[ "${w}" =~ ^[0-9]\.[0-9]\.[0-9] ]]; then
                 WORKFLOW="binary"
                 GF_VERSION="${w}"
                 CPU_COUNT=2
