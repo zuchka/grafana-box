@@ -16,9 +16,9 @@ sudo apt install -y xauth xvfb
 sudo apt install -y wget adduser tmux git
 
 # get standalone binary
-wget https://dl.grafana.com/oss/release/grafana-${TEST_BINARY}.linux-amd64.tar.gz
-tar -zxvf grafana-${TEST_BINARY}.linux-amd64.tar.gz
-cd grafana-${TEST_BINARY} || return
+wget https://dl.grafana.com/${GF_LICENSE}/release/grafana-${GF_TAG}${GF_VERSION}.linux-amd64.tar.gz
+tar -zxvf grafana-${GF_TAG}${GF_VERSION}.linux-amd64.tar.gz
+cd grafana-${GF_VERSION} || exit
 
 # start binary in detached tmux session
 tmux new -d -s grafanaBinary
@@ -110,9 +110,9 @@ sudo yum install -y tmux wget git
 
 
 # get standalone binary
-wget https://dl.grafana.com/oss/release/grafana-${TEST_BINARY}.linux-amd64.tar.gz
-tar -zxvf grafana-${TEST_BINARY}.linux-amd64.tar.gz
-cd grafana-${TEST_BINARY} || return
+wget https://dl.grafana.com/oss/release/grafana-${GF_VERSION}.linux-amd64.tar.gz
+tar -zxvf grafana-${GF_VERSION}.linux-amd64.tar.gz
+cd grafana-${GF_VERSION} || return
 
 # start binary in detached tmux session
 tmux new -d -s grafanaBinary
@@ -199,9 +199,9 @@ sudo yum install -y xorg-x11-server-Xvfb gtk2-devel gtk3-devel libnotify-devel G
 sudo yum install -y tmux wget git
 
 # get standalone binary
-wget https://dl.grafana.com/oss/release/grafana-${TEST_BINARY}.linux-amd64.tar.gz
-tar -zxvf grafana-${TEST_BINARY}.linux-amd64.tar.gz
-cd grafana-${TEST_BINARY} || return
+wget https://dl.grafana.com/oss/release/grafana-${GF_VERSION}.linux-amd64.tar.gz
+tar -zxvf grafana-${GF_VERSION}.linux-amd64.tar.gz
+cd grafana-${GF_VERSION} || return
 
 # start binary in detached tmux session
 tmux new -d -s grafanaBinary

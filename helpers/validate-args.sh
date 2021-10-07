@@ -33,10 +33,10 @@ function validateArgs () {
             ;;
         w)
             w="${OPTARG}"
-            if ! [[ "${w}" =~ ^(e2e-binary|devenv|package|[0-9]\.[0-9]\.[0-9]) ]]; then
+            if ! [[ "${w}" =~ ^(e2e-binary|devenv|package|[0-9]\.[0-9]\.[0-9]|enterprise) ]]; then
                 printf "%b" "You have not chosen a valid workflow.\nPlease choose one from the following list:\n\n* package (if available, uses native package manager)\n* devenv  (fresh build from main branch. Grafana Frontend (yarn start) and Backend (make run) launched in detached Tmux sessions)\n* version (enter as 3 digits. -w 7.5.10, for example, will install Grafana version 7.5.10)\n"
                 usage
-            elif [[ "${w}" =~ ^[0-9]\.[0-9]\.[0-9] ]]; then
+            elif [[ "${w}" =~ ^([0-9]\.[0-9]\.[0-9]|enterprise) ]]; then
                 WORKFLOW="binary"
                 GF_VERSION="${w}"
                 CPU_COUNT=2
@@ -52,7 +52,6 @@ function validateArgs () {
                 BRANCH="${w}"
                 CPU_COUNT=8
                 RAM="16gb"
-                GF_VERSION="8.1.5"
             else
                 WORKFLOW="${w}"
                 CPU_COUNT=2
@@ -77,7 +76,12 @@ function validateArgs () {
             DUMMY_DBS="${OPTARG}"
             ;;
         r)
-            TEST_BINARY="${OPTARG}"
+            r="${OPTARG}"
+            GF_VERSION="${r}"
+            ;;
+        e)
+            export GF_TAG="enterprise-"
+            export GF_LICENSE="enterprise"
             ;;
         *)
             usage
@@ -131,7 +135,15 @@ function nullCheck () {
 
     if [[ -z "${NODE_VERSION}" && "${WORKFLOW}" =~ ^(devenv|e2e-binary) ]]; then
         NODE_VERSION="--lts"
-    fi  
+    fi 
+}
+
+
+function licenseCheck () {
+    if [[ -z "${GF_LICENSE}" ]]; then
+        export GF_LICENSE="oss"
+        export GF_TAG=""
+    fi
 }
 
 function printValues () {
@@ -142,7 +154,7 @@ function printValues () {
     "gcp_machine_type"  "${MACHINE_TYPE} " \
     "gcp_image_family"  "${IMAGE_FAMILY} " \
     "gcp_image_project" "${DISTRO}\n" \
-    "workflow"          "${WORKFLOW} (${GF_VERSION}) " \
+    "workflow"          "${WORKFLOW} (${GF_TAG}${GF_VERSION}) " \
     "branch"            "${BRANCH} " \
     "NodeJS version"    "${NODE_VERSION}\n" \
     "cpu"               "${CPU} " \

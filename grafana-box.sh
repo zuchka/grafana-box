@@ -12,7 +12,7 @@ for helper in helpers/*.sh; do
 done
 
 # validate args
-while getopts ":d:w: :a :n: :z: :r:" o; do
+while getopts ":d:w: :a :n: :z: :r: :e" o; do
   validateArgs "${o}"
 done
 
@@ -21,6 +21,7 @@ shift "$((OPTIND-1))"
 # check for valid branch and nulls
 validateBranch
 nullCheck
+licenseCheck
 
 # generate provisioning scripts and terraform.tfvars
 makeBinary

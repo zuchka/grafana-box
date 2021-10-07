@@ -26,8 +26,8 @@ sudo apt-get update -y
 sudo apt-get install -y wget tmux 
 
 # get standalone binary
-wget https://dl.grafana.com/oss/release/grafana-${GF_VERSION}.linux-amd64.tar.gz
-tar -zxvf grafana-${GF_VERSION}.linux-amd64.tar.gz
+wget https://dl.grafana.com/${GF_LICENSE}/release/grafana-${GF_TAG}${GF_VERSION}.linux-amd64.tar.gz
+tar -zxvf grafana-${GF_TAG}${GF_VERSION}.linux-amd64.tar.gz
 cd grafana-${GF_VERSION} || exit
 
 # start binary in detached tmux session
