@@ -87,17 +87,13 @@ You can reference the table below a complete list of options and combinations.
 
 ||DISTRO|WORKFLOW|ENTERPRISE?|AMD?|NODE?|DATA?|RELEASE?
 |---|---|---|---|---|---|---|---|
-|**FLAG**|-d|-w|-e|-a|-n|-z|-r|
+|**FLAG**|`-d`|`-w`|`-e`|`-a`|`-n`|`-z`|`-r`|
 |**REQUIRED**?|yes|yes|no|no|no|no|**only** with `e2e-binary`|
 |**DEFAULT VALUE**|---|---|Grafana OSS|Intel CPUs|Node 14 LTS|---|---|
-|**OPTIONS**|browse list  |browse list |(no args) `-e` = Grafana Enterprise |(no args) `-a` = AMD |browse list |browse list |use `x.x.x` pattern to list test binary: `-r 8.2.0-beta2`
-||`ubuntu-1804-lts`   | | |  |   |   |
-||`debian-11`|`devenv` (build dev environment from `main`) | | | |
-||`debian-10`|`devenv-foo/bar` (build dev environment from remote branch `foo/bar`) | | | |
-||`centos-stream-8`|`e2e-binary-v8.2.x` (builds from remote release branch `v8.2.x`) | | | |
-||`centos-8`| | | | |
-||`centos-7`| | | | |
-||`rocky-linux-8`| | | | |
+|**USAGE**|`-d <distro>` |`-w <workflow>` |`-e`|`-a`|`-n <version>` |`-z <db>` |`-r <test-binary>`
+|**ARGS**|browse `distro` list |browse `workflow` list |no args |no args|browse `version` list |browse `db` list | use `x.x.x` binary pattern
+
+
 
 ## Interacting with Grafana-Box
 
