@@ -2,9 +2,13 @@
 
 ### Introduction
 
-Grafana Box is a collection of wrapper scripts for Terraform. Use `grafana-box.sh` to bootstrap Grafana instances on GCP virtual machines. It was designed to quickly test and troubleshoot platform-specific issues. With one command, you can run Grafana from a native package manager or a standalone binary, or build Grafana from source in a fully-functioning developer environment (on any remote branch, with any version of NodeJS and any dummy (`devenv`) datasource). You can also run the official `verify-release` e2e tests for Grafana.
+Grafana Box is a collection of wrapper scripts for Terraform. You can use it to quickly test and troubleshoot platform-specific issues. 
+
+Running `grafana-box.sh` will bootstrap an OSS or Enterprise Grafana instance on a GCP virtual machine.  With one command, you can run OSS/Enterprise Grafana from a native package manager or a standalone binary, or build Grafana from source in a fully-functioning developer environment (on any remote branch, with any version of NodeJS and any dummy (`devenv`) datasource). You can also run the official `verify-release` e2e test for Grafana (found in `/grafana/scripts`).
 
 Additionaly, you may build your Grafana Box using eight different Linux distributions.
+
+>\* still working on enterprise + package manager workflow
 
 ## Prerequisites
 
@@ -28,61 +32,81 @@ Additionaly, you may build your Grafana Box using eight different Linux distribu
 ./grafana-box -d <DISTRO> -w <WORKFLOW>
 ```
 
+* pass the `-e` flag to install Grafana Enterprise and not Grafana OSS
+
 ## Example Commands
 
-* Run Grafana on Ubuntu 20.04 using `apt`:
+* Run the standalone Grafana Enterprise `8.1.5` binary on Rocky Linux 8:
+
+```
+./grafana-box.sh -d rocky-linux-8 -w 8.1.5 -e
+```
+
+* Run the newest Grafana on Ubuntu 20.04 using `apt`:
 
 ```
 ./grafana-box.sh -d ubuntu-2004-lts -w package
 ```
 
-* Run Grafana on CentOS 7 using `yum`:
+* Run the newest Grafana on CentOS 7 using `yum`:
 
 ```
 ./grafana-box.sh -d centos-7 -w package
 ```
 
-* Run the standalone Grafana `8.1.5` binary on Rocky Linux 8:
-
-```
-./grafana-box.sh -d rocky-linux-8 -w 8.1.5
-```
-
 * Build a Grafana developer environment from `main` on CentOS Stream 8 using AMD processors:
 
 ```
-./grafana-box.sh -d centos-stream-8 -w devenv -a
+./grafana-box.sh -a -d centos-stream-8 -w devenv -a
 ```
 
 * Build a Grafana Developer Environment:
-    * from remote branch `foo/bar` 
-    * using NodeJS version `14.10.0` 
+    * from remote branch `christmas-2020` 
+    * using NodeJS version `14.10.0`
+    * using AMD processors 
     * including the MySQL and Prometheus `devenv` dummy databases
     * on Debian 10 :
 
 ```
-./grafana-box.sh -d debian-10 -w devenv-foo/bar -n 14.10.0 -z mysql,prometheus
+./grafana-box.sh -a -d debian-10 -w devenv-christmas-2020 -n 14.10.0 -z mysql,prometheus
 ```
 
-* Run the E2E release tests for the `8.2.0-beta2` binary. Test on Ubuntu 18.04 against remote branch `v8.2.x`: 
+* Run the E2E `verify-release` test for:
+    * the Grafana Enterprise `8.2.0-beta2` binary
+    * against remote branch `v8.2.x`
+    * using NodeJS `16.1.0`
+    * on Ubuntu 18.04:
 
 ```
-./grafana-box.sh -d ubuntu-1804-lts -w e2e-binary-v8.2.x -r 8.2.0-beta2
+./grafana-box.sh -e -d ubuntu-1804-lts -w e2e-binary-v8.2.x -r 8.2.0-beta2 -n 16.1.0
 ```
+
+You can reference the table below a complete list of options and combinations.
 
 ## Full Option List
 
-|DISTRO (-d)|WORKFLOW (-w)|CPU (-a) (optional) (no args) (default=Intel)|NODE (-n)  (optional) (`devenv`  and `release-e2e` only)|DATA (-z)  (optional) (devenv only)| RELEASE (-r) (required) (e2e-binary only)
-|---|---|---|---|---|---|
-|`ubuntu-2004-lts `  |`package`  |`-a` (no args) = AMD   |use any valid `nvm` pattern. browse list here   |any `devenv` dummy datasource. browse list here   |the official binary to test for release. required when using `e2e-binary` workflow
-|`ubuntu-1804-lts`   |`8.1.5` : use `x.x.x` pattern for standalone binary |   |   |   |use `x.x.x` pattern to specify binary
-|`debian-11`|`devenv` (build dev environment from `main`) | | |
-|`debian-10`|`devenv-foo/bar` (build dev environment from remote branch `foo/bar`) | | |
-|`centos-stream-8`|`e2e-binary-v8.2.x` (builds from remote release branch `v8.2.x`) | | |
-|`centos-8`| | | |
-|`centos-7`| | | |
-|`rocky-linux-8`| | | |
+||DISTRO|WORKFLOW|ENTERPRISE?|AMD?|NODE?|DATA?|RELEASE?
+|---|---|---|---|---|---|---|---|
+|**FLAG**|-d|-w|-e|-a|-n|-z|-r|
+|**REQUIRED**?|yes|yes|no|no|no|no|**only** with `e2e-binary`|
+|**DEFAULT VALUE**|---|---|Grafana OSS|Intel CPUs|Node 14 LTS|---|---|
+|**OPTIONS**|browse list  |browse list |(no args) `-e` = Grafana Enterprise |(no args) `-a` = AMD |browse list |browse list |use `x.x.x` pattern to list test binary: `-r 8.2.0-beta2`
+||`ubuntu-1804-lts`   | | |  |   |   |
+||`debian-11`|`devenv` (build dev environment from `main`) | | | |
+||`debian-10`|`devenv-foo/bar` (build dev environment from remote branch `foo/bar`) | | | |
+||`centos-stream-8`|`e2e-binary-v8.2.x` (builds from remote release branch `v8.2.x`) | | | |
+||`centos-8`| | | | |
+||`centos-7`| | | | |
+||`rocky-linux-8`| | | | |
 
 ## Interacting with Grafana-Box
 
 ## Cleaning Up and Destroying Grafana-Box
+
+from Grafana Box's root directory, run the following commnand:
+
+```
+./grafana-box destroy
+```
+
+This will auto-approve the destruction of all resources inside every timestamped subdirectory
