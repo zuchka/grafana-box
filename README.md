@@ -97,6 +97,83 @@ You can reference the table below a complete list of options and combinations.
 
 ## Interacting with Grafana-Box
 
+Run a command like this:
+
+```
+./grafana-box.sh -e -d centos-7 -w e2e-binary-v8.2.x -r 8.2.0 -n 16.2.0
+```
+
+The script will validate your arguments and then kick off a terraform build. Terraform will deploy a virtual machine and then provision your environment with software. When Terraform finishes, Grafana Box will output relevant info like this:
+
+```sh
+Done in 55.90s.
+google_compute_instance.instance_with_ip: Creation complete after 9m45s [id=projects/grafana-box/zones/us-central1-a/instances/instance-1633657736]
+
+Apply complete! Resources: 3 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+instance_ip = "35.202.203.36"
+
+current configuration:                        VALID
+
+     gcp_machine_type:                           e2
+     gcp_image_family:                 centos-cloud
+    gcp_image_project:                     centos-7
+
+             workflow:e2e-binary (enterprise-8.2.0)
+               branch:                       v8.2.x
+       NodeJS version:                       16.2.0
+
+                  cpu:                        Intel
+            cpu_count:                            8
+                  ram:                         16gb
+                 disk:                         25gb
+            dummy DBs:
+
+           ssh access:    ssh grafana@35.202.203.36
+       browser access:    http://35.202.203.36:3001
+
+  download e2e report:    scp "grafana@35.202.203.36:/home/grafana/grafana/packages/grafana-e2e/report.json" . && jq -r '.stats' < report.json
+  ```
+
+From here you can access the machine, visit the Grafana UI in any browser, or, in this case, download and parse your e2e test results.
+
+## Accessing `grafana-server` on the VM
+
+Grafana instances installed via the `package` workflow will be enabled and started with `systemd`. To check 
+
+Grafana Box will launch standalone binaries and developer environments in detached `tmux` sessions. After using `ssh` to enter the VM, run this command to list all active tmux sessions:
+
+```sh
+tmux ls
+```
+
+For binaries, you will see an output like this:
+
+```output
+grafanaBinary: 1 windows (created Fri Oct  8 01:50:51 2021)
+```
+
+Developer Environments split the frontend and backend across two sessions:
+
+```
+grafanaBackend: 1 windows (created Fri Oct  8 02:25:16 2021)
+grafanaFrontend: 1 windows (created Fri Oct  8 02:25:16 2021)
+```
+
+Access your detached session using the `tmux` `a` command:
+
+```
+tmux a -t grafanaBinary
+```
+
+You should now see the output from the `grafana-server`'s logs.
+
+Use this key combination to detach the session and return to the main shell: 
+
+Press `CTRL + b`. Let go and quickly press `d`. 
+
 ## Cleaning Up and Destroying Grafana-Box
 
 from Grafana Box's root directory, run the following commnand:
