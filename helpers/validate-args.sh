@@ -136,10 +136,7 @@ function nullCheck () {
     if [[ -z "${NODE_VERSION}" && "${WORKFLOW}" =~ ^(devenv|e2e-binary) ]]; then
         NODE_VERSION="--lts"
     fi 
-}
 
-
-function licenseCheck () {
     if [[ -z "${GF_LICENSE}" ]]; then
         export GF_LICENSE="oss"
         export GF_TAG=""
