@@ -20,12 +20,11 @@ function makePackage () {
 
 # packages
 cd /home/grafana || exit
-sudo apt-get install grafana=7.5.1
 sudo apt-get install -y apt-transport-https
 sudo apt-get install -y software-properties-common wget
 
 wget -q -O - https://packages.grafana.com/gpg.key | sudo apt-key add -
-echo "deb https://packages.grafana.com/oss/deb stable main" | sudo tee -a /etc/apt/sources.list.d/grafana.list
+echo "deb https://packages.grafana.com/${GF_LICENSE}/deb stable main" | sudo tee -a /etc/apt/sources.list.d/grafana.list
 
 sudo apt-get update  -y
 sudo apt-get install -y grafana=7.5.1
@@ -61,7 +60,7 @@ sudo bash -c "cat > /etc/yum.repos.d/grafana.repo" <<"EOG"
 
 [grafana]
 name=grafana
-baseurl=https://packages.grafana.com/oss/rpm
+baseurl=https://packages.grafana.com/${GF_LICENSE}/rpm
 repo_gpgcheck=1
 enabled=1
 gpgcheck=1
