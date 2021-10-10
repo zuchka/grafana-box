@@ -21,7 +21,6 @@ shift "$((OPTIND-1))"
 # check for valid branch and nulls
 validateBranch
 nullCheck
-licenseCheck
 
 # generate provisioning scripts and terraform.tfvars
 makeBinary
