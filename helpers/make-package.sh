@@ -28,9 +28,9 @@ wget -q -O - https://packages.grafana.com/gpg.key | sudo apt-key add -
 echo "deb https://packages.grafana.com/${GF_LICENSE}/deb stable main" | sudo tee -a /etc/apt/sources.list.d/grafana.list
 
 sudo apt update  -y
-sudo apt install -y grafana=7.0.0
+sudo apt install -y grafana${DEB_TAG}=7.0.0
 sudo apt clean
-sudo apt install -y grafana
+sudo apt install -y grafana${DEB_TAG}
 
 # add to systemd and start
 sudo /bin/systemctl daemon-reload
@@ -70,9 +70,9 @@ sslverify=1
 sslcacert=/etc/pki/tls/certs/ca-bundle.crt
 EOG
 
-sudo yum update -y grafana
-sudo yum install -y grafana-7.5.1
-sudo yum update -y grafana
+sudo yum update -y grafana${DEB_TAG}
+sudo yum install -y grafana${DEB_TAG}-7.5.1
+sudo yum update -y grafana${DEB_TAG}
 
 sudo /bin/systemctl daemon-reload
 sudo /bin/systemctl enable grafana-server

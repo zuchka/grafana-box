@@ -81,6 +81,7 @@ function validateArgs () {
             ;;
         e)
             export GF_TAG="enterprise-"
+            export DEB_TAG="-enterprise"
             export GF_LICENSE="enterprise"
             ;;
         *)
@@ -140,6 +141,7 @@ function nullCheck () {
     if [[ -z "${GF_LICENSE}" ]]; then
         export GF_LICENSE="oss"
         export GF_TAG=""
+        export DEB_TAG=""
     fi
 }
 
