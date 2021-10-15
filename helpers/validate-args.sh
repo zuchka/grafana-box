@@ -33,10 +33,10 @@ function validateArgs () {
             ;;
         w)
             w="${OPTARG}"
-            if ! [[ "${w}" =~ ^(e2e-binary|devenv|package|[0-9]\.[0-9]\.[0-9]|enterprise) ]]; then
+            if ! [[ "${w}" =~ ^(e2e-binary|devenv|package|[0-9]\.[0-9]\.[0-9]) ]]; then
                 printf "%b" "You have not chosen a valid workflow.\nPlease choose one from the following list:\n\n* package (if available, uses native package manager)\n* devenv  (fresh build from main branch. Grafana Frontend (yarn start) and Backend (make run) launched in detached Tmux sessions)\n* version (enter as 3 digits. -w 7.5.10, for example, will install Grafana version 7.5.10)\n"
                 usage
-            elif [[ "${w}" =~ ^([0-9]\.[0-9]\.[0-9]|enterprise) ]]; then
+            elif [[ "${w}" =~ ^([0-9]\.[0-9]\.[0-9]) ]]; then
                 WORKFLOW="binary"
                 GF_VERSION="${w}"
                 CPU_COUNT=2
@@ -83,6 +83,9 @@ function validateArgs () {
             export GF_TAG="enterprise-"
             export DEB_TAG="-enterprise"
             export GF_LICENSE="enterprise"
+            ;;
+        m)
+            export MANUAL_PACKAGE="dpkg"
             ;;
         *)
             usage
@@ -145,22 +148,28 @@ function nullCheck () {
     fi
 }
 
+# TODO: add flow control for workflow output package manager; package manual; binary
+# TODO: add flow control for version output package manager; package manual; binary
+# TODO: add flow control for dummy dbs package manager; package manual; binary
+
 function printValues () {
     MACHINE_IP=$(terraform -chdir="${GFB_FOLDER}"/ output -raw instance_ip)
 
     printf "\n%s:%30s\n\n" "current configuration" "VALID "
     printf "%21b:%30b\n" \
-    "gcp_machine_type"  "${MACHINE_TYPE} " \
-    "gcp_image_family"  "${IMAGE_FAMILY} " \
-    "gcp_image_project" "${DISTRO}\n" \
-    "workflow"          "${WORKFLOW} (${GF_TAG}${GF_VERSION}) " \
-    "branch"            "${BRANCH} " \
-    "NodeJS version"    "${NODE_VERSION}\n" \
-    "cpu"               "${CPU} " \
-    "cpu_count"         "${CPU_COUNT} " \
-    "ram"               "${RAM} " \
-    "disk"              "25gb " \
-    "dummy DBs"         "${DUMMY_DBS}\n" \
+    "gcp_machine_type"  "${MACHINE_TYPE} "                 \
+    "gcp_image_family"  "${IMAGE_FAMILY} "                 \
+    "gcp_image_project" "${DISTRO}\n"                      \
+    "workflow"          "${WORKFLOW} (${MANUAL_PACKAGE}) " \
+    "license"           "${GF_LICENSE} "                   \
+    "version"           "${GF_VERSION} "                   \
+    "branch"            "${BRANCH} "                       \
+    "NodeJS version"    "${NODE_VERSION}\n"                \
+    "cpu"               "${CPU} "                          \
+    "cpu_count"         "${CPU_COUNT} "                    \
+    "ram"               "${RAM} "                          \
+    "disk"              "25gb "                            \
+    "dummy DBs"         "${DUMMY_DBS}\n"                   \
     "ssh access"        "ssh grafana@${MACHINE_IP} "
     
     # e2e test instances run on 3001
