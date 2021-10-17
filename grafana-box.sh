@@ -2,7 +2,7 @@
 
 # shellcheck disable=SC1090
 
-# run init script to copy template & set directory variables 
+# run init script to copy template & set directory variables
 # OR destroy boxes on "destroy"
 . init.sh
 
