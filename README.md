@@ -8,8 +8,6 @@ Running `grafana-box.sh` will bootstrap an OSS or Enterprise Grafana instance on
 
 Additionaly, you may build your Grafana Box using eight different Linux distributions.
 
->\* still working on enterprise + package manager workflow
-
 ## Prerequisites
 
 * a GCP account
@@ -85,13 +83,13 @@ You can reference the table below a complete list of options and combinations.
 
 ## Full Option List
 
-||DISTRO|WORKFLOW|ENTERPRISE?|AMD?|NODE?|DATA?|RELEASE?
-|---|---|---|---|---|---|---|---|
-|**FLAG**|`-d`|`-w`|`-e`|`-a`|`-n`|`-z`|`-r`|
-|**REQUIRED**?|yes|yes|no|no|no|no|**only** with `e2e-binary`|
-|**DEFAULT VALUE**|---|---|Grafana OSS|Intel CPUs|Node 14 LTS|---|---|
-|**USAGE**|`-d <distro>` |`-w <workflow>` |`-e`|`-a`|`-n <version>` |`-z <db>` |`-r <test-binary>`
-|**ARGS**|browse `distro` list |browse `workflow` list |no args |no args|browse `version` list |browse `db` list | use `x.x.x` binary pattern
+||DISTRO|WORKFLOW|ENTERPRISE?|AMD?|NODE?|DATA?|RELEASE?|MANUAL DEB/RPM?
+|---|---|---|---|---|---|---|---|---|
+|**FLAG**|`-d`|`-w`|`-e`|`-a`|`-n`|`-z`|`-r`|`-m`
+|**REQUIRED**?|yes|yes|no|no|no|no|**only** with `e2e-binary`|no|
+|**DEFAULT VALUE**|---|---|Grafana OSS|Intel CPUs|Node 14 LTS|---|---|latest|
+|**USAGE**|`-d <distro>` |`-w <workflow>` |`-e`|`-a`|`-n <node-version>` |`-z <db>` |`-r <test-grafana-version>`|`-m <grafana-version>`
+|**ARGS**|browse `distro` list |browse `workflow` list |no args |no args|browse `version` list |browse `db` list |use `x.x.x` binary pattern |use `x.x.x` binary pattern
 
 
 
