@@ -26,14 +26,14 @@ echo "deb https://packages.grafana.com/${GF_LICENSE}/deb stable main" | sudo tee
 sudo apt update  -y
 sudo apt install -y grafana${DEB_TAG}=7.5.1
 sudo apt clean
-sudo apt install -y grafana${DEB_TAG}
+sudo apt upgrade -y grafana${DEB_TAG}
 
 # add to systemd and start
 sudo /bin/systemctl daemon-reload
 sudo /bin/systemctl enable grafana-server
 sudo /bin/systemctl start grafana-server
 EOT
-elif [[ ${IMAGE_FAMILY} =~ (centos|rocky) ]]; then
+  elif [[ ${IMAGE_FAMILY} =~ (centos|rocky) ]]; then
   cat <<EOT > ./"${GFB_FOLDER}"/scripts/package.sh
 #!/bin/bash
 
@@ -53,15 +53,15 @@ sslverify=1
 sslcacert=/etc/pki/tls/certs/ca-bundle.crt
 EOG
 
-sudo yum update -y grafana${DEB_TAG}
-sudo yum install -y grafana${DEB_TAG}-7.5.1
+# sudo yum update -y grafana${DEB_TAG}
+# sudo yum install -y grafana${DEB_TAG}-7.5.1
 sudo yum update -y grafana${DEB_TAG}
 
 sudo /bin/systemctl daemon-reload
 sudo /bin/systemctl enable grafana-server
 sudo /bin/systemctl start grafana-server
 EOT
-fi
+  fi
 }
 
 
@@ -78,16 +78,15 @@ sudo apt install -y libfontconfig1 adduser
 sudo apt install -y software-properties-common wget
 
 # manual install workflow
-wget https://dl.grafana.com/${GF_LICENSE}/release/grafana${DEB_TAG}_8.2.1_amd64.deb
-sudo dpkg -i grafana${DEB_TAG}_8.2.1_amd64.deb
+wget https://dl.grafana.com/${GF_LICENSE}/release/grafana${DEB_TAG}_${MANUAL_PACKAGE_VERSION}_amd64.deb
+sudo dpkg -i grafana${DEB_TAG}_${MANUAL_PACKAGE_VERSION}_amd64.deb
 
 # add to systemd and start
 sudo /bin/systemctl daemon-reload
 sudo /bin/systemctl enable grafana-server
 sudo /bin/systemctl start grafana-server
-
 EOT
-elif [[ ${IMAGE_FAMILY} =~ (centos|rocky) ]]; then
+  elif [[ ${IMAGE_FAMILY} =~ (centos|rocky) ]]; then
   cat <<EOT > ./"${GFB_FOLDER}"/scripts/package.sh
 #!/bin/bash
 
@@ -109,12 +108,12 @@ sslcacert=/etc/pki/tls/certs/ca-bundle.crt
 EOG
 
 sudo yum update -y grafana${DEB_TAG}
-sudo yum install -y grafana${DEB_TAG}-7.5.1
+sudo yum install -y grafana${DEB_TAG}-${MANUAL_PACKAGE_VERSION}
 sudo yum update -y grafana${DEB_TAG}
 
 sudo /bin/systemctl daemon-reload
 sudo /bin/systemctl enable grafana-server
 sudo /bin/systemctl start grafana-server
 EOT
-fi
+  fi
 }

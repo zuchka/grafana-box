@@ -85,6 +85,8 @@ function validateArgs () {
             export GF_LICENSE="enterprise"
             ;;
         m)
+            m="${OPTARG}"
+            export MANUAL_PACKAGE_VERSION=${m}            
             export MANUAL_PACKAGE="dpkg"
             ;;
         *)
@@ -148,6 +150,7 @@ function nullCheck () {
     fi
 }
 
+# TODO: arg validation for -m flag
 # TODO: add flow control for workflow output package manager; package manual; binary
 # TODO: add flow control for version output package manager; package manual; binary
 # TODO: add flow control for dummy dbs package manager; package manual; binary
