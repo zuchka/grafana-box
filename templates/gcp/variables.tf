@@ -1,5 +1,5 @@
 variable "project" {
-  default = "grafana-box"
+  default = "raintank-dev"
 }
 
 variable "name" {}

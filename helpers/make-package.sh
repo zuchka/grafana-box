@@ -20,12 +20,13 @@ sudo apt install -y apt-transport-https
 sudo apt install -y libfontconfig1
 sudo apt install -y software-properties-common wget
 
-wget -q -O - https://packages.grafana.com/gpg.key | sudo apt-key add -
-echo "deb https://packages.grafana.com/${GF_LICENSE}/deb stable main" | sudo tee -a /etc/apt/sources.list.d/grafana.list
+# sudo wget -q -O /usr/share/keyrings/grafana.key https://packages.grafana.com/gpg.key
+wget -qO - https://packages.grafana.com/gpg.key | sudo gpg --dearmor --output /usr/share/keyrings/grafana.gpg
+echo "deb [signed-by=/usr/share/keyrings/grafana.gpg] https://packages.grafana.com/${GF_LICENSE}/deb stable main" | sudo tee -a /etc/apt/sources.list.d/grafana.list
 
 sudo apt update  -y
-sudo apt install -y grafana${DEB_TAG}=7.5.1
-sudo apt clean
+# sudo apt install -y grafana${DEB_TAG}=7.5.1
+# sudo apt clean
 sudo apt upgrade -y grafana${DEB_TAG}
 
 # add to systemd and start
